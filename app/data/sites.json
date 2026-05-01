@@ -321,6 +321,31 @@
             "title": "Rufus",
             "url": "https://rufus.ie/zh",
             "desc": "轻松创建 USB 启动盘"
+        },
+        {
+            "title": "Google Fonts",
+            "url": "https://fonts.google.com",
+            "desc": "字体"
+        },
+        {
+            "title": "Source Han Serif",
+            "url": "https://source.typekit.com/source-han-serif/cn",
+            "desc": "思源宋体 开源的泛 CJK 字体"
+        },
+        {
+            "title": "DockerHub",
+            "url": "https://hub.docker.com",
+            "desc": "Docker镜像仓库"
+        },
+        {
+            "title": "Hugging Face",
+            "url": "https://huggingface.co",
+            "desc": "托管大量开源模型和数据集,ML 的Github"
+        },
+        {
+            "title": "Skills",
+            "url": "https://skills.sh",
+            "desc": "开源的skill库"
         }
     ],
     "frontend": [
@@ -450,9 +475,34 @@
             "desc": "IDE工具集"
         },
         {
+            "title": "SublimeText",
+            "url": "https://www.sublimetext.com",
+            "desc": "代码编辑器"
+        },
+        {
+            "title": "Xshell",
+            "url": "https://www.xshell.com/zh/free-for-home-school/",
+            "desc": "功能强大SSH和SFTP/FTP客户机"
+        },
+        {
+            "title": "Sourcetree",
+            "url": "https://www.sourcetreeapp.com",
+            "desc": "Git GUI"
+        },
+        {
+            "title": "Redis Insight",
+            "url": "https://redis.io/insight",
+            "desc": "Redis 可视化工具"
+        },
+        {
             "title": "Postman",
             "url": "https://postman.com",
             "desc": "API调试工具"
+        },
+        {
+            "title": "Obsidian",
+            "url": "https://obsidian.md/zh",
+            "desc": "免费且灵活的私人笔记应用"
         },
         {
             "title": "Insomnia",

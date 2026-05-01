@@ -16,7 +16,24 @@ export default defineNuxtConfig({
       link: [
         // 引入 Inter 字体增加现代感
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap' }
-      ]
+      ],
+      script: [
+        // <!-- Google tag (gtag.js) -->
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-CJF858TEN5',
+          async: true,
+        },
+        {
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-CJF858TEN5');
+          `,
+          type: 'text/javascript',
+        },
+      ],
     }
   },
 })

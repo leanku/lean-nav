@@ -13,10 +13,11 @@
             isMounted ? 'transition-[width,transform] duration-200 cubic-bezier' : 'not-mounted'
         ]">
 
-            <div class="h-16 flex items-center px-5 border-b border-white/[0.04] flex-shrink-0">
+            <div class="h-16 flex items-center px-5 border-b border-white/[0.04] flex-shrink-0"
+                @click="$router.push('/')">
                 <div class="flex items-center min-w-[36px]">
                     <div
-                        class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-200">
+                        class=" w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
                             class="lucide lucide-navigation text-white rotate-[15deg]">
@@ -24,7 +25,7 @@
                         </svg>
                     </div>
                     <h1 :class="[
-                        'ml-3 text-[14px] font-bold tracking-tight transition-opacity duration-200',
+                        'cursor-pointer ml-3 text-[14px] font-bold tracking-tight transition-opacity duration-200',
                         isCollapsed ? 'opacity-0 w-0 pointer-events-none' : 'opacity-100'
                     ]">
                         Lean<span class="text-blue-500">Nav</span>
@@ -204,7 +205,10 @@
 
             <footer
                 class="mt-auto py-8 text-center border-t border-gray-200/40 dark:border-white/[0.03] bg-white/30 dark:bg-black/10 transition-colors duration-300">
-                <p class="text-[10px] font-medium text-slate-400">Copyright © 2026 LeanNav · 开发者导航 · design by Leanku
+                <p class="text-[10px] font-medium text-slate-400">Copyright © 2026 <a
+                        href="https://nav.leanku.com">LeanNav</a>
+                    · 开发者导航 · design by <a href="https://blog.leanku.com/" target="__black"
+                        class="dark:bg-black/50">Leanku</a>
                 </p>
             </footer>
         </main>
@@ -263,7 +267,7 @@ useHead({
 })
 
 /* 响应式状态 */
-const isDark = ref(true)
+const isDark = ref(false)
 const isCollapsed = ref(false)
 const isMobile = ref(false)
 const searchQuery = ref('')

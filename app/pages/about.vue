@@ -17,9 +17,9 @@
               </svg>
             </div>
             <h1 :class="[
-              'ml-3 text-sm font-black tracking-tighter transition-all duration-300',
+              'cursor-pointer ml-3 text-sm font-black tracking-tighter transition-all duration-300',
               isCollapsed ? 'opacity-0 scale-90 -translate-x-4' : 'opacity-100 scale-100 translate-x-0'
-            ]">
+            ]" @click="$router.push('/')">
               Lean<span class="text-blue-500">Nav</span>
             </h1>
           </div>
@@ -70,8 +70,10 @@
     </main>
 
     <footer
-      class="mt-auto py-10 text-center border-t border-gray-200/50 dark:border-white/5 bg-white/30 dark:bg-black/20">
-      <p class="text-xs font-medium text-slate-400">Copyright © 2026 LeanNav · 开发者导航 · design by Leanku</p>
+      class="mt-auto py-8 text-center border-t border-gray-200/40 dark:border-white/[0.03] bg-white/30 dark:bg-black/10 transition-colors duration-300">
+      <p class="text-[10px] font-medium text-slate-400">Copyright © 2026 <a href="https://nav.leanku.com">LeanNav</a>
+        · 开发者导航 · design by <a href="https://blog.leanku.com/" target="__black" class="dark:bg-black/50">Leanku</a>
+      </p>
     </footer>
 
   </div>
