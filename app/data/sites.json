@@ -1,0 +1,942 @@
+{
+    "recommend": [
+        {
+            "title": "GitHub",
+            "url": "https://github.com",
+            "desc": "全球最大代码托管平台"
+        },
+        {
+            "title": "Google",
+            "url": "https://google.com",
+            "desc": "全球最大搜索引擎"
+        },
+        {
+            "title": "YouTube",
+            "url": "https://youtube.com",
+            "desc": "全球最大视频平台"
+        },
+        {
+            "title": "必应",
+            "url": "https://www.bing.com",
+            "desc": "搜索 - Microsoft 必应"
+        },
+        {
+            "title": "ChatGPT",
+            "url": "https://chat.openai.com",
+            "desc": "最流行的AI助手"
+        },
+        {
+            "title": "Stack Overflow",
+            "url": "https://stackoverflow.com",
+            "desc": "开发者问答社区"
+        },
+        {
+            "title": "Pinterest",
+            "url": "https://pinterest.com",
+            "desc": "视觉灵感收藏平台"
+        },
+        {
+            "title": "谷歌翻译",
+            "url": "https://translate.google.com",
+            "desc": "谷歌翻译"
+        },
+        {
+            "title": "Notion",
+            "url": "https://notion.so",
+            "desc": "笔记与知识管理工具"
+        },
+        {
+            "title": "Figma",
+            "url": "https://figma.com",
+            "desc": "在线协作设计工具"
+        },
+        {
+            "title": "Vercel",
+            "url": "https://vercel.com",
+            "desc": "前端部署与托管平台"
+        },
+        {
+            "title": "Cloudflare",
+            "url": "https://cloudflare.com",
+            "desc": "CDN与网络安全服务"
+        }
+    ],
+    "news": [
+        {
+            "title": "Hacker News",
+            "url": "https://news.ycombinator.com",
+            "desc": "硅谷技术与创业社区"
+        },
+        {
+            "title": "Product Hunt",
+            "url": "https://producthunt.com",
+            "desc": "新产品发布与趋势发现"
+        },
+        {
+            "title": "掘金",
+            "url": "https://juejin.cn",
+            "desc": "中文开发者社区"
+        },
+        {
+            "title": "少数派",
+            "url": "https://sspai.com",
+            "desc": "高质量数字生活与效率内容"
+        },
+        {
+            "title": "V2EX",
+            "url": "https://www.v2ex.com",
+            "desc": "创意工作者社区"
+        },
+        {
+            "title": "InfoQ",
+            "url": "https://www.infoq.com",
+            "desc": "技术趋势与架构实践"
+        },
+        {
+            "title": "36氪",
+            "url": "https://36kr.com",
+            "desc": "互联网创业与商业资讯"
+        },
+        {
+            "title": "机器之心",
+            "url": "https://www.jiqizhixin.com",
+            "desc": "人工智能领域媒体"
+        },
+        {
+            "title": "阮一峰周刊",
+            "url": "https://www.ruanyifeng.com/blog/",
+            "desc": "每周技术与趋势精选"
+        },
+        {
+            "title": "The Verge",
+            "url": "https://www.theverge.com",
+            "desc": "科技与互联网文化媒体"
+        },
+        {
+            "title": "Ars Technica",
+            "url": "https://arstechnica.com",
+            "desc": "深度科技与行业分析"
+        },
+        {
+            "title": "Reddit / r/programming",
+            "url": "https://www.reddit.com/r/programming/",
+            "desc": "开发者热门讨论社区"
+        }
+    ],
+    "inspiration": [
+        {
+            "title": "Dribbble",
+            "url": "https://dribbble.com",
+            "desc": "设计师灵感社区"
+        },
+        {
+            "title": "Behance",
+            "url": "https://behance.net",
+            "desc": "Adobe设计作品平台"
+        },
+        {
+            "title": "Awwwards",
+            "url": "https://awwwards.com",
+            "desc": "优秀网页设计展示"
+        },
+        {
+            "title": "Pinterest",
+            "url": "https://pinterest.com",
+            "desc": "视觉灵感收藏平台"
+        },
+        {
+            "title": "Mobbin",
+            "url": "https://mobbin.com",
+            "desc": "移动应用UI设计参考库"
+        },
+        {
+            "title": "UI Movement",
+            "url": "https://uimovement.com",
+            "desc": "UI动效灵感合集"
+        },
+        {
+            "title": "Land-book",
+            "url": "https://land-book.com",
+            "desc": "优秀网页Landing展示"
+        },
+        {
+            "title": "Lapa Ninja",
+            "url": "https://www.lapa.ninja",
+            "desc": "高质量网页设计案例"
+        },
+        {
+            "title": "Collect UI",
+            "url": "https://collectui.com",
+            "desc": "每日UI灵感更新"
+        }
+    ],
+    "design-tools": [
+        {
+            "title": "Figma",
+            "url": "https://figma.com",
+            "desc": "在线协作设计工具"
+        },
+        {
+            "title": "Canva",
+            "url": "https://canva.com",
+            "desc": "在线设计平台"
+        },
+        {
+            "title": "Photopea",
+            "url": "https://photopea.com",
+            "desc": "在线PS替代工具"
+        },
+        {
+            "title": "Remove.bg",
+            "url": "https://remove.bg",
+            "desc": "AI自动抠图工具"
+        },
+        {
+            "title": "Adobe Express",
+            "url": "https://express.adobe.com",
+            "desc": "轻量设计工具"
+        },
+        {
+            "title": "Coolors",
+            "url": "https://coolors.co",
+            "desc": "配色生成工具"
+        },
+        {
+            "title": "Spline",
+            "url": "https://spline.design",
+            "desc": "3D设计工具"
+        },
+        {
+            "title": "Framer",
+            "url": "https://framer.com",
+            "desc": "设计+建站工具"
+        },
+        {
+            "title": "Penpot",
+            "url": "https://penpot.app",
+            "desc": "开源设计工具"
+        }
+    ],
+    "icons": [
+        {
+            "title": "Iconify",
+            "url": "https://iconify.design",
+            "desc": "统一图标接口库"
+        },
+        {
+            "title": "Lucide",
+            "url": "https://lucide.dev",
+            "desc": "开源图标库"
+        },
+        {
+            "title": "Heroicons",
+            "url": "https://heroicons.com",
+            "desc": "Tailwind官方图标"
+        },
+        {
+            "title": "Flaticon",
+            "url": "https://flaticon.com",
+            "desc": "海量图标资源"
+        },
+        {
+            "title": "Phosphor Icons",
+            "url": "https://phosphoricons.com",
+            "desc": "现代UI图标库"
+        },
+        {
+            "title": "Tabler Icons",
+            "url": "https://tabler-icons.io",
+            "desc": "开源SVG图标"
+        },
+        {
+            "title": "Remix Icon",
+            "url": "https://remixicon.com",
+            "desc": "系统化图标库"
+        },
+        {
+            "title": "Icons8",
+            "url": "https://icons8.com",
+            "desc": "多风格图标资源"
+        },
+        {
+            "title": "SVG Repo",
+            "url": "https://www.svgrepo.com",
+            "desc": "免费SVG图标库"
+        }
+    ],
+    "images": [
+        {
+            "title": "Unsplash",
+            "url": "https://unsplash.com",
+            "desc": "免费高清图片"
+        },
+        {
+            "title": "Pexels",
+            "url": "https://pexels.com",
+            "desc": "免费素材图片库"
+        },
+        {
+            "title": "Pixabay",
+            "url": "https://pixabay.com",
+            "desc": "免费图片视频资源"
+        },
+        {
+            "title": "Wallhaven",
+            "url": "https://wallhaven.cc",
+            "desc": "高质量壁纸站"
+        },
+        {
+            "title": "Burst",
+            "url": "https://burst.shopify.com",
+            "desc": "商业免费图片"
+        },
+        {
+            "title": "StockSnap",
+            "url": "https://stocksnap.io",
+            "desc": "高质量库存照片"
+        },
+        {
+            "title": "Freepik",
+            "url": "https://www.freepik.com",
+            "desc": "设计素材资源库"
+        },
+        {
+            "title": "Kaboompics",
+            "url": "https://kaboompics.com",
+            "desc": "生活方式摄影素材"
+        },
+        {
+            "title": "PNGIMG",
+            "url": "https://pngimg.com",
+            "desc": "透明背景PNG素材"
+        }
+    ],
+    "storage": [
+        {
+            "title": "HelloWindows",
+            "url": "https://hellowindows.cn",
+            "desc": "录官方原版Windows系统"
+        },
+        {
+            "title": "Rufus",
+            "url": "https://rufus.ie/zh",
+            "desc": "轻松创建 USB 启动盘"
+        }
+    ],
+    "frontend": [
+        {
+            "title": "Vue.js",
+            "url": "https://vuejs.org",
+            "desc": "渐进式前端框架"
+        },
+        {
+            "title": "React",
+            "url": "https://react.dev",
+            "desc": "组件化UI库"
+        },
+        {
+            "title": "Nuxt",
+            "url": "https://nuxt.com",
+            "desc": "Vue全栈框架"
+        },
+        {
+            "title": "Vite",
+            "url": "https://vitejs.dev",
+            "desc": "前端构建工具"
+        },
+        {
+            "title": "Tailwind CSS",
+            "url": "https://tailwind.nodejs.cn",
+            "desc": "工具优先的 CSS 框架"
+        }
+    ],
+    "backend": [
+        {
+            "title": "Node.js",
+            "url": "https://nodejs.org",
+            "desc": "JS运行时"
+        },
+        {
+            "title": "Laravel",
+            "url": "https://laravel.com",
+            "desc": "PHP框架"
+        },
+        {
+            "title": "Spring",
+            "url": "https://spring.io",
+            "desc": "Java生态框架"
+        },
+        {
+            "title": "Gin",
+            "url": "https://gin-gonic.com",
+            "desc": "Go Web框架"
+        }
+    ],
+    "database": [
+        {
+            "title": "MySQL",
+            "url": "https://mysql.com",
+            "desc": "关系型数据库"
+        },
+        {
+            "title": "PostgreSQL",
+            "url": "https://postgresql.org",
+            "desc": "高级关系数据库"
+        },
+        {
+            "title": "Redis",
+            "url": "https://redis.io",
+            "desc": "内存数据库"
+        },
+        {
+            "title": "MongoDB",
+            "url": "https://mongodb.com",
+            "desc": "NoSQL数据库"
+        }
+    ],
+    "devops": [
+        {
+            "title": "Docker",
+            "url": "https://docker.com",
+            "desc": "容器化平台"
+        },
+        {
+            "title": "Kubernetes",
+            "url": "https://kubernetes.io",
+            "desc": "容器编排系统"
+        },
+        {
+            "title": "GitHub Actions",
+            "url": "https://github.com/features/actions",
+            "desc": "CI/CD工具"
+        },
+        {
+            "title": "Jenkins",
+            "url": "https://jenkins.io",
+            "desc": "自动化构建工具"
+        }
+    ],
+    "cloud": [
+        {
+            "title": "AWS",
+            "url": "https://aws.amazon.com",
+            "desc": "云计算平台"
+        },
+        {
+            "title": "Cloudflare",
+            "url": "https://cloudflare.com",
+            "desc": "CDN与安全"
+        },
+        {
+            "title": "Vercel",
+            "url": "https://vercel.com",
+            "desc": "前端部署平台"
+        },
+        {
+            "title": "Netlify",
+            "url": "https://netlify.com",
+            "desc": "静态网站托管"
+        }
+    ],
+    "dev-tools": [
+        {
+            "title": "VS Code",
+            "url": "https://code.visualstudio.com",
+            "desc": "代码编辑器"
+        },
+        {
+            "title": "JetBrains",
+            "url": "https://jetbrains.com",
+            "desc": "IDE工具集"
+        },
+        {
+            "title": "Postman",
+            "url": "https://postman.com",
+            "desc": "API调试工具"
+        },
+        {
+            "title": "Insomnia",
+            "url": "https://insomnia.rest",
+            "desc": "接口测试工具"
+        }
+    ],
+    "chrome-extensions": [
+        {
+            "title": "沉浸式翻译",
+            "url": "https://immersivetranslate.com",
+            "desc": "免费的双语对照 AI 翻译工具"
+        },
+        {
+            "title": "Awesome Screenshot",
+            "url": "https://support.awesomescreenshot.com/",
+            "desc": "截图、录屏工具"
+        },
+        {
+            "title": "FeHelper",
+            "url": "https://fehelper.com/",
+            "desc": "集成 32+ 种实用工具"
+        },
+        {
+            "title": "身份验证器",
+            "url": "https://authenticator.cc/",
+            "desc": "Two-factor authentication in your browser"
+        },
+        {
+            "title": "Wappalyzer",
+            "url": "https://www.wappalyzer.com",
+            "desc": "识别网站技术栈"
+        },
+        {
+            "title": "Octotree",
+            "url": "https://www.octotree.io",
+            "desc": "GitHub代码树插件"
+        },
+        {
+            "title": "JSON Viewer",
+            "url": "https://chrome.google.com/webstore/detail/json-viewer",
+            "desc": "JSON格式化查看"
+        },
+        {
+            "title": "Dark Reader",
+            "url": "https://darkreader.org",
+            "desc": "全局暗黑模式"
+        },
+        {
+            "title": "Grammarly",
+            "url": "https://www.grammarly.com",
+            "desc": "英文写作辅助"
+        },
+        {
+            "title": "Loom",
+            "url": "https://www.loom.com",
+            "desc": "屏幕录制工具"
+        },
+        {
+            "title": "Notion Web Clipper",
+            "url": "https://www.notion.so/web-clipper",
+            "desc": "网页内容收藏"
+        },
+        {
+            "title": "GoFullPage",
+            "url": "https://gofullpage.com",
+            "desc": "网页长截图工具"
+        }
+    ],
+    "tools": [
+        {
+            "title": "JSON Formatter",
+            "url": "https://jsonformatter.org",
+            "desc": "JSON格式化工具"
+        },
+        {
+            "title": "Regex101",
+            "url": "https://regex101.com",
+            "desc": "正则表达式调试"
+        },
+        {
+            "title": "CodePen",
+            "url": "https://codepen.io",
+            "desc": "前端在线运行"
+        },
+        {
+            "title": "Postman",
+            "url": "https://postman.com",
+            "desc": "API调试工具"
+        }
+    ],
+    "file-tools": [
+        {
+            "title": "ILovePDF",
+            "url": "https://www.ilovepdf.com",
+            "desc": "PDF处理工具合集"
+        },
+        {
+            "title": "Smallpdf",
+            "url": "https://smallpdf.com",
+            "desc": "PDF转换与压缩"
+        },
+        {
+            "title": "PDF24",
+            "url": "https://tools.pdf24.org",
+            "desc": "免费PDF工具箱"
+        },
+        {
+            "title": "Convertio",
+            "url": "https://convertio.co",
+            "desc": "文件格式转换工具"
+        },
+        {
+            "title": "CloudConvert",
+            "url": "https://cloudconvert.com",
+            "desc": "多格式转换平台"
+        },
+        {
+            "title": "DocTranslator",
+            "url": "https://www.onlinedoctranslator.com",
+            "desc": "文档翻译工具"
+        },
+        {
+            "title": "TinyWow",
+            "url": "https://tinywow.com",
+            "desc": "免费文件处理工具"
+        }
+    ],
+    "image-tools": [
+        {
+            "title": "Photopea",
+            "url": "https://photopea.com",
+            "desc": "在线PS替代工具"
+        },
+        {
+            "title": "Canva",
+            "url": "https://canva.com",
+            "desc": "在线设计工具"
+        },
+        {
+            "title": "Pixlr",
+            "url": "https://pixlr.com",
+            "desc": "在线图片编辑器"
+        },
+        {
+            "title": "Fotor",
+            "url": "https://www.fotor.com",
+            "desc": "图片设计与编辑工具"
+        },
+        {
+            "title": "Squoosh",
+            "url": "https://squoosh.app",
+            "desc": "图片压缩工具"
+        },
+        {
+            "title": "Remove.bg",
+            "url": "https://remove.bg",
+            "desc": "AI抠图工具"
+        },
+        {
+            "title": "Let's Enhance",
+            "url": "https://letsenhance.io",
+            "desc": "AI图片增强"
+        }
+    ],
+    "online-tools": [
+        {
+            "title": "Tool.lu",
+            "url": "https://tool.lu",
+            "desc": "开发者工具箱"
+        },
+        {
+            "title": "IT Tools",
+            "url": "https://it-tools.tech",
+            "desc": "开发实用工具合集"
+        },
+        {
+            "title": "JSON Formatter",
+            "url": "https://jsonformatter.org",
+            "desc": "JSON解析工具"
+        },
+        {
+            "title": "Base64 Guru",
+            "url": "https://base64.guru",
+            "desc": "编码解码工具"
+        },
+        {
+            "title": "UUID Generator",
+            "url": "https://www.uuidgenerator.net",
+            "desc": "UUID生成工具"
+        },
+        {
+            "title": "QR Code Generator",
+            "url": "https://www.qr-code-generator.com",
+            "desc": "二维码生成"
+        },
+        {
+            "title": "Speedtest",
+            "url": "https://speedtest.net",
+            "desc": "网络测速工具"
+        },
+        {
+            "title": "Drawnix",
+            "url": "https://drawnix.com",
+            "desc": "开源白板工具"
+        },
+        {
+            "title": "favicon.io",
+            "url": "https://favicon.io/",
+            "desc": "Favicon 生成"
+        },
+        {
+            "title": "Screenshot Creator",
+            "url": "https://screenshotcreator.com",
+            "desc": "制作出精美的应用展示截图"
+        },
+        {
+            "title": "ASCII",
+            "url": "https://asciiart.website",
+            "desc": "ASCII 生成"
+        }
+    ],
+    "productivity": [
+        {
+            "title": "Notion",
+            "url": "https://notion.so",
+            "desc": "笔记与协作工具"
+        },
+        {
+            "title": "Obsidian",
+            "url": "https://obsidian.md",
+            "desc": "知识管理工具"
+        },
+        {
+            "title": "Trello",
+            "url": "https://trello.com",
+            "desc": "任务管理工具"
+        },
+        {
+            "title": "Todoist",
+            "url": "https://todoist.com",
+            "desc": "待办事项管理"
+        }
+    ],
+    "tutorials": [
+        {
+            "title": "MDN",
+            "url": "https://developer.mozilla.org",
+            "desc": "Web开发权威文档"
+        },
+        {
+            "title": "W3Schools",
+            "url": "https://w3schools.com",
+            "desc": "Web入门学习平台"
+        },
+        {
+            "title": "菜鸟教程",
+            "url": "https://runoob.com",
+            "desc": "中文入门教程站"
+        },
+        {
+            "title": "廖雪峰教程",
+            "url": "https://liaoxuefeng.com",
+            "desc": "经典编程入门教程"
+        },
+        {
+            "title": "DevDocs",
+            "url": "https://devdocs.io",
+            "desc": "开发文档聚合平台"
+        },
+        {
+            "title": "Stack Overflow Docs",
+            "url": "https://stackoverflow.com",
+            "desc": "开发问题与实践经验"
+        },
+        {
+            "title": "Vue 官方文档",
+            "url": "https://vuejs.org",
+            "desc": "Vue.js 官方指南"
+        },
+        {
+            "title": "React 文档",
+            "url": "https://react.dev",
+            "desc": "React 官方文档"
+        },
+        {
+            "title": "Laravel 文档",
+            "url": "https://laravel.com/docs",
+            "desc": "PHP框架官方文档"
+        },
+        {
+            "title": "Node.js 文档",
+            "url": "https://nodejs.org/docs",
+            "desc": "Node.js 官方文档"
+        },
+        {
+            "title": "Go by Example",
+            "url": "https://gobyexample.com",
+            "desc": "Go语言示例教程"
+        },
+        {
+            "title": "CSS-Tricks",
+            "url": "https://css-tricks.com",
+            "desc": "前端技巧与实践"
+        }
+    ],
+    "courses": [
+        {
+            "title": "Coursera",
+            "url": "https://coursera.org",
+            "desc": "全球高校在线课程平台"
+        },
+        {
+            "title": "edX",
+            "url": "https://edx.org",
+            "desc": "高校与机构课程平台"
+        },
+        {
+            "title": "Udemy",
+            "url": "https://udemy.com",
+            "desc": "技能与职业课程平台"
+        },
+        {
+            "title": "网易云课堂",
+            "url": "https://study.163.com",
+            "desc": "中文在线学习平台"
+        },
+        {
+            "title": "YouTube",
+            "url": "https://youtube.com",
+            "desc": "全球最大免费学习资源平台"
+        },
+        {
+            "title": "freeCodeCamp",
+            "url": "https://www.freecodecamp.org",
+            "desc": "免费编程学习与实战平台"
+        },
+        {
+            "title": "Frontend Masters",
+            "url": "https://frontendmasters.com",
+            "desc": "前端深度课程平台"
+        },
+        {
+            "title": "Pluralsight",
+            "url": "https://www.pluralsight.com",
+            "desc": "开发者技术课程平台"
+        },
+        {
+            "title": "慕课网",
+            "url": "https://imooc.com",
+            "desc": "国内编程学习平台"
+        },
+        {
+            "title": "极客时间",
+            "url": "https://time.geekbang.org",
+            "desc": "技术专栏与体系课程"
+        },
+        {
+            "title": "Bilibili",
+            "url": "https://www.bilibili.com",
+            "desc": "国内优质视频与学习平台"
+        }
+    ],
+    "ai-chat": [
+        {
+            "title": "ChatGPT",
+            "url": "https://chat.openai.com",
+            "desc": "最流行的AI对话工具"
+        },
+        {
+            "title": "Claude",
+            "url": "https://claude.ai",
+            "desc": "长文本能力强的AI助手"
+        },
+        {
+            "title": "Gemini",
+            "url": "https://gemini.google.com",
+            "desc": "Google多模态AI"
+        },
+        {
+            "title": "Perplexity",
+            "url": "https://www.perplexity.ai",
+            "desc": "AI搜索引擎"
+        },
+        {
+            "title": "Qwen Studio",
+            "url": "https://chat.qwen.ai",
+            "desc": "Qwen Studio"
+        },
+        {
+            "title": "Z.ai",
+            "url": "https://chat.z.ai/",
+            "desc": "Z.ai - Free AI Chatbot & Agent powered by GLM-5.1 & GLM-5"
+        },
+        {
+            "title": "DeepSeek - 探索未至之境",
+            "url": "https://chat.deepseek.com/",
+            "desc": "深度求索（DeepSeek）"
+        }
+    ],
+    "ai-code": [
+        {
+            "title": "Claude Code",
+            "url": "https://claude.com/product/claude-code",
+            "desc": "代理编码工具"
+        },
+        {
+            "title": "Codex",
+            "url": "https://openai.com/zh-Hans-CN/codex/",
+            "desc": " ChatGPT AI 编程智能体"
+        },
+        {
+            "title": "GitHub Copilot",
+            "url": "https://github.com/features/copilot",
+            "desc": "AI编程助手"
+        },
+        {
+            "title": "Cursor",
+            "url": "https://cursor.sh",
+            "desc": "AI原生代码编辑器"
+        },
+        {
+            "title": "Codeium",
+            "url": "https://codeium.com",
+            "desc": "免费AI代码补全"
+        },
+        {
+            "title": "TRAE",
+            "url": "https://www.trae.cn/",
+            "desc": "字节跳动推出的编码工具"
+        },
+        {
+            "title": "Qoder",
+            "url": "https://qoder.com/zh",
+            "desc": "阿里发布的编程平台"
+        },
+        {
+            "title": "Phind",
+            "url": "https://phind.com",
+            "desc": "开发者AI搜索引擎"
+        }
+    ],
+    "ai-image": [
+        {
+            "title": "Midjourney",
+            "url": "https://www.midjourney.com",
+            "desc": "高质量AI绘图"
+        },
+        {
+            "title": "Stable Diffusion",
+            "url": "https://stability.ai",
+            "desc": "开源AI绘图模型"
+        },
+        {
+            "title": "Leonardo AI",
+            "url": "https://leonardo.ai",
+            "desc": "游戏/设计AI绘图"
+        },
+        {
+            "title": "Playground AI",
+            "url": "https://playgroundai.com",
+            "desc": "在线AI绘图平台"
+        }
+    ],
+    "ai-tools": [
+        {
+            "title": "Notion AI",
+            "url": "https://www.notion.so/product/ai",
+            "desc": "AI笔记与写作"
+        },
+        {
+            "title": "Runway",
+            "url": "https://runwayml.com",
+            "desc": "AI视频生成工具"
+        },
+        {
+            "title": "Poe",
+            "url": "https://poe.com",
+            "desc": "多模型AI平台"
+        },
+        {
+            "title": "Gamma",
+            "url": "https://gamma.app",
+            "desc": "AI生成PPT"
+        }
+    ]
+}
