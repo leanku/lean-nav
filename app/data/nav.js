@@ -12,7 +12,8 @@ import {
     Layout, Database, Cloud, Terminal, GitBranch,
     FileText, Link,
     Chrome,
-    Box
+    Box,
+    Newspaper,
 } from 'lucide-vue-next'
 
 export const navConfig = [
@@ -26,7 +27,7 @@ export const navConfig = [
     {
         name: '社区资讯',
         id: 'news',
-        icon: Dock
+        icon: Newspaper
     },
 
     /* ===== AI类 ===== */

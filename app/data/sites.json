@@ -346,6 +346,11 @@
             "title": "Skills",
             "url": "https://skills.sh",
             "desc": "开源的skill库"
+        },
+        {
+            "title": "n8n-mcp",
+            "url": "https://www.n8n-mcp.com",
+            "desc": "一个用于构建n8n工作流的MCP"
         }
     ],
     "frontend": [
@@ -373,6 +378,16 @@
             "title": "Tailwind CSS",
             "url": "https://tailwind.nodejs.cn",
             "desc": "工具优先的 CSS 框架"
+        },
+        {
+            "title": "docsify",
+            "url": "https://docsify.js.org/#/zh-cn",
+            "desc": "docsify 可以快速帮你生成文档网站"
+        },
+        {
+            "title": "arco.design",
+            "url": "https://arco.design",
+            "desc": "字节跳动出品的企业级设计系统"
         }
     ],
     "backend": [
@@ -417,6 +432,26 @@
             "title": "MongoDB",
             "url": "https://mongodb.com",
             "desc": "NoSQL数据库"
+        },
+        {
+            "title": "SQLite",
+            "url": "https://sqlite.org",
+            "desc": "世界上使用最多的数据库引擎"
+        },
+        {
+            "title": "Elasticsearch",
+            "url": "https://www.elastic.co/elasticsearch",
+            "desc": "一个开源的分布式搜索和分析引擎"
+        },
+        {
+            "title": "Qdrant",
+            "url": "https://qdrant.tech/",
+            "desc": "向量数据库"
+        },
+        {
+            "title": "PostgreSQL",
+            "url": "https://www.postgresql.org",
+            "desc": "一个强大、开源的对象关系数据库"
         }
     ],
     "devops": [
@@ -439,6 +474,66 @@
             "title": "Jenkins",
             "url": "https://jenkins.io",
             "desc": "自动化构建工具"
+        },
+        {
+            "title": "Drone",
+            "url": "https://drone.cool",
+            "desc": "Drone 是一个现代化的持续集成平台"
+        },
+        {
+            "title": "JumpServer",
+            "url": "https://docs.jumpserver.org/zh/v4",
+            "desc": "开源堡垒机"
+        },
+        {
+            "title": "Harbor",
+            "url": "https://goharbor.io",
+            "desc": "自部署建镜像仓库"
+        },
+        {
+            "title": "K3S",
+            "url": "https://docs.k3s.io/zh",
+            "desc": "轻量级的 Kubernetes"
+        },
+        {
+            "title": "Gogs",
+            "url": "https://gogs.io/getting-started/introduction",
+            "desc": "搭建自己的 Git 服务"
+        },
+        {
+            "title": "Bark",
+            "url": "https://bark.day.app",
+            "desc": "简单调用接口即可给自己的iPhone发送推送"
+        },
+        {
+            "title": "Server酱",
+            "url": "https://sc3.ft07.com",
+            "desc": "极简推送服务"
+        },
+        {
+            "title": "Prometheus",
+            "url": "https://prometheus.io",
+            "desc": "开源指标和监控，适用于您的系统和服务"
+        },
+        {
+            "title": "Statuspage",
+            "url": "https://www.atlassian.com/zh/software/statuspage",
+            "desc": "服务状态展示"
+        },
+        {
+            "title": "ClustrMaps",
+            "url": "https://clustrmaps.com",
+            "desc": "访客热力图"
+        },
+        {
+            "title": "Analytics",
+            "url": "nalytics.google.com/analytics/web",
+            "desc": "谷歌统计"
+        },
+        {
+            "title": "ClustrMaps",
+            "url": "https://clustrmaps.com/",
+            "desc": "访客热力图"
         }
     ],
     "cloud": [
@@ -503,6 +598,16 @@
             "title": "Obsidian",
             "url": "https://obsidian.md/zh",
             "desc": "免费且灵活的私人笔记应用"
+        },
+        {
+            "title": "Shields.io",
+            "url": "https://shields.io/badges",
+            "desc": "Badges 徽章 生成"
+        },
+        {
+            "title": "Lorem Picsum",
+            "url": "https://picsum.photos/",
+            "desc": "URL后添加尺寸随机图片"
         },
         {
             "title": "Insomnia",
@@ -723,6 +828,31 @@
             "title": "ASCII",
             "url": "https://asciiart.website",
             "desc": "ASCII 生成"
+        },
+        {
+            "title": "resend",
+            "url": "https://resend.com/",
+            "desc": "发送邮件"
+        },
+        {
+            "title": "smail",
+            "url": "https://smail.pw",
+            "desc": "一键创建24小时临时邮箱。"
+        },
+        {
+            "title": "sms-activate",
+            "url": "https://sms-activate.io/cn",
+            "desc": "在线接收短信"
+        },
+        {
+            "title": "firecrawl",
+            "url": "https://www.firecrawl.dev",
+            "desc": "用于人工智能搜索、抓取和与网络交互的API"
+        },
+        {
+            "title": "地址生成",
+            "url": "https://www.shenfendaquan.com",
+            "desc": "地址生成"
         }
     ],
     "productivity": [
@@ -969,6 +1099,21 @@
     ],
     "ai-tools": [
         {
+            "title": "Ollama",
+            "url": "https://ollama.com/",
+            "desc": "运行本地大模型的工具"
+        },
+        {
+            "title": "llama.cpp",
+            "url": "https://github.com/ggml-org/llama.cpp",
+            "desc": "运行本地大模型的工具"
+        },
+        {
+            "title": "LM Studio",
+            "url": "https://lmstudio.ai/",
+            "desc": "运行本地大模型的工具"
+        },
+        {
             "title": "Notion AI",
             "url": "https://www.notion.so/product/ai",
             "desc": "AI笔记与写作"
@@ -987,6 +1132,26 @@
             "title": "Gamma",
             "url": "https://gamma.app",
             "desc": "AI生成PPT"
+        },
+        {
+            "title": "Pixelle-Video",
+            "url": "https://aidc-ai.github.io/Pixelle-Video/zh",
+            "desc": "AI 视频创作工具 "
+        },
+        {
+            "title": "n8n",
+            "url": "https://n8n.io",
+            "desc": "开源工作流"
+        },
+        {
+            "title": "扣子",
+            "url": "https://www.coze.cn",
+            "desc": "AI工作流"
+        },
+        {
+            "title": "OpenClaw",
+            "url": "https://docs.openclaw.ai/zh-CN",
+            "desc": "一个自托管 Gateway 网关，消息应用与一个始终在线的 AI 助手之间的桥梁"
         }
     ]
 }
