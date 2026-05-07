@@ -351,6 +351,16 @@
             "title": "n8n-mcp",
             "url": "https://www.n8n-mcp.com",
             "desc": "一个用于构建n8n工作流的MCP"
+        },
+        {
+            "title": "阿里巴巴开源镜像",
+            "url": "https://developer.aliyun.com/mirror/",
+            "desc": "阿里巴巴开源镜像"
+        },
+        {
+            "title": "Packagist",
+            "url": "https://packagist.org/",
+            "desc": "composer "
         }
     ],
     "frontend": [
@@ -385,7 +395,7 @@
             "desc": "docsify 可以快速帮你生成文档网站"
         },
         {
-            "title": "arco.design",
+            "title": "Arco Design",
             "url": "https://arco.design",
             "desc": "字节跳动出品的企业级设计系统"
         }
@@ -449,9 +459,9 @@
             "desc": "向量数据库"
         },
         {
-            "title": "PostgreSQL",
-            "url": "https://www.postgresql.org",
-            "desc": "一个强大、开源的对象关系数据库"
+            "title": "SQL Server",
+            "url": "https://learn.microsoft.com/zh-cn/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver17",
+            "desc": "Microsoft 公司推出的关系型数据库管理系统"
         }
     ],
     "devops": [
@@ -479,6 +489,21 @@
             "title": "Drone",
             "url": "https://drone.cool",
             "desc": "Drone 是一个现代化的持续集成平台"
+        },
+        {
+            "title": "travis-ci",
+            "url": "https://www.travis-ci.com",
+            "desc": "免费持续集成平台"
+        },
+        {
+            "title": "htop",
+            "url": "https://htop.dev/",
+            "desc": " 一个交互式进程查看器"
+        },
+        {
+            "title": "OneDev",
+            "url": "https://onedev.io/",
+            "desc": "一个带有 CI/CD、看板和软件包的 Git 服务器。"
         },
         {
             "title": "JumpServer",
@@ -595,9 +620,29 @@
             "desc": "API调试工具"
         },
         {
+            "title": "CODELF",
+            "url": "https://unbug.github.io/codelf/",
+            "desc": "变量命名参考"
+        },
+        {
+            "title": "Monaco Editor",
+            "url": "https://microsoft.github.io/monaco-editor/",
+            "desc": "在线网页代码编辑"
+        },
+        {
             "title": "Obsidian",
             "url": "https://obsidian.md/zh",
             "desc": "免费且灵活的私人笔记应用"
+        },
+        {
+            "title": "NOTEGEN",
+            "url": "https://notegen.top/cn",
+            "desc": "开源免费跨平台Markdown笔记软件"
+        },
+        {
+            "title": "draw.io",
+            "url": "https://www.drawio.com/",
+            "desc": "免费绘图、脑图"
         },
         {
             "title": "Shields.io",
@@ -608,6 +653,16 @@
             "title": "Lorem Picsum",
             "url": "https://picsum.photos/",
             "desc": "URL后添加尺寸随机图片"
+        },
+        {
+            "title": "PicGo",
+            "url": "https://picgo.app",
+            "desc": "图片上传"
+        },
+        {
+            "title": "minio",
+            "url": "https://github.com/minio/minio",
+            "desc": "高性能、S3 兼容的对象存储"
         },
         {
             "title": "Insomnia",
@@ -853,6 +908,11 @@
             "title": "地址生成",
             "url": "https://www.shenfendaquan.com",
             "desc": "地址生成"
+        },
+        {
+            "title": "Qwerty Learner",
+            "url": "https://qwerty.kaiyi.cool/",
+            "desc": "单词 打字"
         }
     ],
     "productivity": [
@@ -885,12 +945,12 @@
         },
         {
             "title": "W3Schools",
-            "url": "https://w3schools.com",
+            "url": "https://www.w3schools.com",
             "desc": "Web入门学习平台"
         },
         {
             "title": "菜鸟教程",
-            "url": "https://runoob.com",
+            "url": "https://www.runoob.com",
             "desc": "中文入门教程站"
         },
         {
@@ -1119,6 +1179,11 @@
             "desc": "AI笔记与写作"
         },
         {
+            "title": "PandaWiki",
+            "url": "https://pandawiki.docs.baizhi.cloud/",
+            "desc": "AI 大模型驱动的开源知识库搭建系统"
+        },
+        {
             "title": "Runway",
             "url": "https://runwayml.com",
             "desc": "AI视频生成工具"
@@ -1152,6 +1217,21 @@
             "title": "OpenClaw",
             "url": "https://docs.openclaw.ai/zh-CN",
             "desc": "一个自托管 Gateway 网关，消息应用与一个始终在线的 AI 助手之间的桥梁"
+        },
+        {
+            "title": "ComfyUI",
+            "url": "https://docs.comfy.org/zh",
+            "desc": "强大的开源节点式生成式 AI 应用程序"
+        },
+        {
+            "title": "system-prompts-and-models-of-ai-tools",
+            "url": "https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools",
+            "desc": "开源的各大模型的增强 System Prompts"
+        },
+        {
+            "title": "Prompt123.cn",
+            "url": "https://www.prompt123.cn/",
+            "desc": "免费的中文AI提示词"
         }
     ]
 }
