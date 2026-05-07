@@ -420,6 +420,16 @@
             "title": "Gin",
             "url": "https://gin-gonic.com",
             "desc": "Go Web框架"
+        },
+        {
+            "title": "C#",
+            "url": "https://learn.microsoft.com/zh-cn/dotnet/csharp/tour-of-csharp/",
+            "desc": "C# 文档"
+        },
+        {
+            "title": "SRS",
+            "url": "https://ossrs.io/lts/zh-cn/",
+            "desc": "SRS(Simple Realtime Server) 一个简单高效的实时视频服务器"
         }
     ],
     "database": [
@@ -620,6 +630,11 @@
             "desc": "API调试工具"
         },
         {
+            "title": "JWT Debugger",
+            "url": "https://www.jwt.io/",
+            "desc": "Decode, verify, and generate JSON Web Tokens"
+        },
+        {
             "title": "CODELF",
             "url": "https://unbug.github.io/codelf/",
             "desc": "变量命名参考"
@@ -752,6 +767,11 @@
             "title": "Postman",
             "url": "https://postman.com",
             "desc": "API调试工具"
+        },
+        {
+            "title": "Valine",
+            "url": "https://valine.js.org/",
+            "desc": "一款快速、简洁且高效的无后端评论系统"
         }
     ],
     "file-tools": [
