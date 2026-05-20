@@ -50,7 +50,7 @@
         <div class="flex flex-wrap items-center justify-center gap-6 mt-1">
           <a href="mailto:contact@leannav.com" class="flex items-center gap-2 hover:text-blue-500 transition-colors">
             <Mail class="w-4 h-4 text-slate-400" />
-            <span>leanku@hotmail.com</span>
+            <span>ceo@leanku.com</span>
           </a>
           <span class="hidden sm:inline text-slate-300 dark:text-slate-700">|</span>
           <!-- <a href="https://github.com/your-repo" target="_blank"
