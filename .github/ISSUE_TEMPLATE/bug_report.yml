@@ -1,0 +1,59 @@
+name: Bug Report
+description: 报告一个可复现的问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: 提交前请先搜索是否已有相同 Issue。
+  - type: textarea
+    id: what
+    attributes:
+      label: 问题描述
+      description: 实际发生了什么？
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      description: 一步步说明如何复现
+      placeholder: |
+        1. 打开 …
+        2. 点击 …
+        3. 看到 …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: 版本 / 部署来源
+      description: 例如 v1.3.0、nav.leanku.com，或自部署
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      options: [Windows, macOS, Linux, iOS, Android, 其他]
+    validations:
+      required: false
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 浏览器
+      options: [Chrome, Edge, Safari, Firefox, 其他]
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: 截图 / 补充信息
+    validations:
+      required: false

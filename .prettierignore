@@ -1,0 +1,16 @@
+# Dependencies & build output
+node_modules
+.output
+.nuxt
+.nitro
+.data
+.cache
+dist
+
+# Lockfiles & generated assets
+package-lock.json
+public/icons
+public/og-image.png
+
+# Local project data
+.workbuddy

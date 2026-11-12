@@ -22,3 +22,20 @@ logs
 .env
 .env.*
 !.env.example
+
+# Local project data (automations, memory, brand backups) — not for the repo
+.workbuddy/
+
+# TypeScript / build caches
+*.tsbuildinfo
+
+# OS / editor cruft
+Thumbs.db
+.vercel
+
+# Local env overrides
+.env.local
+.env.*.local
+
+# Coverage / test reports
+coverage/

@@ -1,22 +1,45 @@
 {
-  "name": "my-navigator",
+  "name": "lean-nav",
+  "version": "1.4.0",
   "type": "module",
-  "private": true,
+  "license": "MIT",
+  "description": "纯静态部署的开发者导航站：无后端、无数据库，访客可在页面内自定义分类与网站。",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leanku/lean-nav.git"
+  },
+  "homepage": "https://github.com/leanku/lean-nav#readme",
+  "bugs": {
+    "url": "https://github.com/leanku/lean-nav/issues"
+  },
+  "keywords": [
+    "navigation",
+    "bookmarks",
+    "developer-tools",
+    "nuxt",
+    "static-site",
+    "pwa",
+    "tailwindcss"
+  ],
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "check": "node scripts/check-config.mjs",
+    "icons": "node scripts/fetch-icons.mjs",
+    "brand": "node scripts/brand-icons.mjs",
+    "prebuild": "npm run check && node scripts/fetch-icons.mjs --quick",
+    "pregenerate": "npm run check && node scripts/fetch-icons.mjs --quick"
   },
   "dependencies": {
+    "lucide-vue-next": "^1.0.0",
     "nuxt": "^4.4.2",
     "vue": "^3.5.33",
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "@nuxt/content": "^3.13.0",
-    "@nuxtjs/tailwindcss": "^6.14.0",
-    "lucide-vue-next": "^1.0.0"
+    "@nuxtjs/tailwindcss": "^6.14.0"
   }
 }

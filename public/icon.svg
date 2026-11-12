@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- 与 public/navigator.png 同一枚标记：黑色圆角方形（22% 圆角），导航箭头镂空。
+       换 logo 时这张矢量文件需与 navigator.png 同步；位图派生走 npm run brand。 -->
+  <defs>
+    <mask id="cursor">
+      <rect width="512" height="512" fill="#fff"/>
+      <g transform="translate(256 256) rotate(15) scale(13) translate(-12 -12)">
+        <polygon points="3 11 22 2 13 21 11 13 3 11" fill="#000"/>
+      </g>
+    </mask>
+  </defs>
+  <rect width="512" height="512" rx="113" fill="#0A0A0B" mask="url(#cursor)"/>
+</svg>

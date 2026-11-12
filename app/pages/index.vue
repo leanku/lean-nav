@@ -1,557 +1,450 @@
 <template>
-    <div
-        class="min-h-screen bg-[#f9f9f9] dark:bg-[#0f0f12] text-[#374151] dark:text-[#94a3b8] font-inter antialiased transition-colors duration-300">
+  <AppShell ref="shellRef" v-model="searchQuery" :source="source" :nav-data="navData"
+    :active-category="activeCategory" :collapsed-groups="collapsedGroups"
+    @toggle-group="toggleGroup" @navigate="onNavigate" @open-editor="editorOpen = true"
+    @submit="openFirstResult" @clear="onClearSearch">
 
-        <Transition name="fade">
-            <div v-if="!isCollapsed && isMobile" @click="isCollapsed = true"
-                class="fixed inset-0 z-[60] bg-black/40 backdrop-blur-md lg:hidden"></div>
-        </Transition>
+    <article class="p-5 sm:p-7 lg:p-10 w-full max-w-[1600px] mx-auto flex-1">
 
-        <aside :class="[
-            isCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-[72px]' : 'translate-x-0 w-[240px]',
-            'fixed inset-y-0 left-0 z-[70] bg-[#222327] dark:bg-[#15171e] text-white flex flex-col shadow-2xl overflow-hidden',
-            isMounted ? 'transition-[width,transform] duration-200 cubic-bezier' : 'not-mounted'
-        ]">
+      <!-- 收藏与最近访问：静态站用本机存储实现「自己的起始页」 -->
+      <div v-if="!searchQuery.trim() && (favorites.length || recent.length)" data-personal class="mb-10 space-y-5">
+        <section v-if="favorites.length">
+          <h2 class="flex items-center gap-2 mb-3 text-body font-medium text-ink">
+            <Star class="nav-icon w-4 h-4 text-ink" fill="currentColor" aria-hidden="true" />
+            我的收藏 <span class="tnum text-caption text-ink-subtle">{{ favorites.length }}</span>
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            <div v-for="site in favorites" :key="site.url"
+              class="inline-flex items-center rounded-control bg-surface-1 border border-hairline hover:border-hairline-strong transition-colors">
+              <a :href="site.url" target="_blank" rel="noopener noreferrer nofollow" @click="recordVisit(site)"
+                class="min-h-[44px] flex items-center pl-3 pr-1 text-body text-ink">
+                {{ site.title }}<span class="ml-1 text-caption text-ink-tertiary">↗</span>
+              </a>
+              <span role="button" tabindex="0" :aria-label="`取消收藏 ${site.title}`" title="取消收藏"
+                @click="removeFavorite(site.url)" @keydown.enter.prevent="removeFavorite(site.url)"
+                @keydown.space.prevent="removeFavorite(site.url)"
+                class="w-8 h-8 mr-1 flex items-center justify-center rounded-control text-ink-tertiary hover:text-danger hover:bg-surface-2 cursor-pointer transition-colors">×</span>
+            </div>
+          </div>
+        </section>
 
-            <div class="h-16 flex items-center px-5 border-b border-white/[0.04] flex-shrink-0"
-                @click="$router.push('/')">
-                <div class="flex items-center min-w-[36px]">
-                    <div
-                        class=" w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-navigation text-white rotate-[15deg]">
-                            <polygon points="3 11 22 2 13 21 11 13 3 11" />
-                        </svg>
-                    </div>
-                    <h1 :class="[
-                        'cursor-pointer ml-3 text-[14px] font-bold tracking-tight transition-opacity duration-200',
-                        isCollapsed ? 'opacity-0 w-0 pointer-events-none' : 'opacity-100'
-                    ]">
-                        Lean<span class="text-blue-500">Nav</span>
-                    </h1>
-                </div>
+        <section v-if="recent.length">
+          <h2 class="flex items-center gap-2 mb-3 text-body font-medium text-ink">
+            <Clock3 class="nav-icon w-4 h-4 text-ink" aria-hidden="true" /> 最近访问
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            <a v-for="site in recent" :key="site.url" :href="site.url" target="_blank"
+              rel="noopener noreferrer nofollow" @click="recordVisit(site)"
+              class="min-h-[44px] inline-flex items-center px-3 rounded-control bg-surface-1 border border-hairline text-body text-ink-muted hover:border-hairline-strong hover:text-ink transition-colors">
+              {{ site.title }}
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div v-if="searchQuery.trim()"
+        class="mb-6 flex items-center justify-between gap-3 text-body text-ink-subtle">
+        <span role="status" aria-live="polite">
+          找到 <b class="tnum text-ink font-medium">{{ resultCount }}</b> 个结果 · <span class="tnum">{{ Object.keys(displayData).length }}</span> 个栏目
+          <span class="ml-2 hidden sm:inline text-caption text-ink-tertiary">回车打开第一个结果</span>
+        </span>
+        <button @click="onClearSearch" type="button" class="shrink-0 text-body hover:text-ink transition-colors">清空搜索</button>
+      </div>
+
+      <div v-for="item in navData" :key="item.id || item.name">
+        <template v-for="group in (item.children ? item.children : [item])" :key="group?.id">
+          <section v-if="group?.id && displayData[group.id]" :id="group.id"
+            class="mb-[72px] scroll-mt-24 category-section">
+            <!-- 编辑式标头：墨色竖条 + 22px 栏目主标题 + 计数 + 延伸细线，结构感不靠色块 -->
+            <div class="flex items-center gap-3 mb-6">
+              <span class="w-[2px] h-[18px] rounded-full shrink-0" :style="{ backgroundColor: accentOf(group.id) }" aria-hidden="true"></span>
+              <h2 class="section-title text-ink whitespace-nowrap">{{ group.name }}</h2>
+              <span class="tnum text-caption text-ink-tertiary">{{ displayData[group.id].length }}</span>
+              <span class="h-px flex-1 bg-hairline" aria-hidden="true"></span>
             </div>
 
-            <nav class="flex-1 overflow-y-auto custom-scrollbar py-4 overflow-x-hidden">
-                <div v-for="(item, gIdx) in navData" :key="gIdx" class="px-3 mb-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+              <a v-for="(site, si) in displayData[group.id]" :key="group.id + '-' + si" :href="site.url"
+                target="_blank" rel="noopener noreferrer nofollow" @click="recordVisit(site)"
+                class="site-card group relative flex items-start gap-3 px-3.5 py-3 rounded-card bg-surface-1 border border-hairline hover:bg-surface-2">
 
-                    <template v-if="item.id">
-                        <NuxtLink v-if="item.url && item.url.startsWith('/')" :to="item.url"
-                            @click="handleTopLevelNavClick"
-                            class="flex items-center h-9 px-3 rounded-md transition-all duration-150 group relative text-slate-400 hover:text-white hover:bg-white/5"
-                            :class="[
-                                isCollapsed ? 'justify-center' : '',
-                                activeCategory === item.id
-                                    ? 'bg-blue-600/20 text-white font-medium border-l-2 border-blue-500 -ml-3 pl-5'
-                                    : 'border-l-2 border-transparent'
-                            ]">
-                            <component :is="item.icon" class="w-4 h-4 flex-shrink-0" />
-                            <span
-                                :class="['ml-3 text-[12px] whitespace-nowrap transition-all duration-200', isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto']">
-                                {{ item.name }}
-                            </span>
-                        </NuxtLink>
-
-                        <a v-else :href="'#' + item.id" @click="handleTopLevelNavClick"
-                            class="flex items-center h-9 px-3 rounded-md transition-all duration-150 group relative text-slate-400 hover:text-white hover:bg-white/5"
-                            :class="[
-                                isCollapsed ? 'justify-center' : '',
-                                activeCategory === item.id
-                                    ? 'bg-blue-600/20 text-white font-medium  -ml-3 pl-5'
-                                    : 'border-l-2 border-transparent'
-                            ]">
-                            <component :is="item.icon" class="w-4 h-4 flex-shrink-0" />
-                            <span
-                                :class="['ml-3 text-[12px] whitespace-nowrap transition-all duration-200', isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto']">
-                                {{ item.name }}
-                            </span>
-                        </a>
-                    </template>
-
-                    <div v-else-if="item.children">
-                        <div @click="toggleGroup(gIdx)"
-                            class="flex items-center h-9 px-3 rounded-md cursor-pointer hover:bg-white/5 transition-all duration-150 group"
-                            :class="[
-                                isCollapsed ? 'justify-center' : '',
-                                isGroupActive(item) ? 'text-white font-medium' : 'text-slate-400'
-                            ]">
-                            <component :is="item.icon" class="w-4 h-4 flex-shrink-0" />
-                            <span
-                                :class="['ml-3 text-[13px] flex-1 whitespace-nowrap transition-all duration-200', isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto']">
-                                {{ item.name }}
-                            </span>
-                            <ChevronDown v-if="!isCollapsed"
-                                class="w-3 h-3 opacity-40 transition-transform duration-200"
-                                :class="{ '-rotate-90': collapsedGroups.includes(gIdx) }" />
-                        </div>
-
-                        <div v-show="!collapsedGroups.includes(gIdx) && !isCollapsed" class="mt-1 space-y-0.5">
-                            <a v-for="child in item.children" :key="child.id" :href="'#' + child.id"
-                                @click="handleChildNavClick"
-                                class="flex items-center h-8 pl-11 pr-4 rounded-md hover:bg-white/5 text-[12px] transition-all duration-150 "
-                                :class="[
-                                    activeCategory === child.id
-                                        ? 'border-blue-500 bg-white/5 text-white font-semibold'
-                                        : 'border-transparent text-slate-400 hover:text-white'
-                                ]">
-                                {{ child.name }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-
-        <main :class="[
-            isCollapsed ? 'lg:ml-[72px]' : 'lg:ml-[240px]',
-            'min-h-screen flex flex-col',
-            isMounted ? 'transition-[margin] duration-200 cubic-bezier' : 'not-mounted'
-        ]">
-
-            <header
-                class="sticky top-0 z-40 h-16 flex items-center px-6 gap-4 bg-white/80 dark:bg-[#0f0f12]/80 backdrop-blur-xl border-b border-gray-200/40 dark:border-white/[0.03] transition-colors duration-300">
-                <button @click="toggleMenu"
-                    class="p-2 -ml-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 rounded-lg transition-all duration-150 active:scale-95"
-                    aria-label="Toggle Menu">
-                    <Menu class="w-4.5 h-4.5" />
-                </button>
-
-                <div class="flex-1 max-w-2xl relative group">
-                    <Search
-                        class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200" />
-                    <input v-model="searchQuery" type="search" placeholder="搜索资源、工具、社区、栏目..."
-                        class="w-full bg-slate-100/50 dark:bg-white/5 border border-transparent focus:border-blue-500/30 focus:bg-white dark:focus:bg-[#15171e] rounded-xl py-2 pl-11 pr-4 text-xs outline-none transition-all duration-200 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+                <!-- favicon 放在独立的浅色/深色底片上，透明图标不会糊在卡片底色里 -->
+                <div class="site-icon relative w-10 h-10 shrink-0 rounded-control bg-canvas border border-hairline flex items-center justify-center overflow-hidden">
+                  <span class="absolute inset-0 flex items-center justify-center text-card-title font-medium text-ink-subtle"
+                    aria-hidden="true">{{ (site.title || '?').charAt(0) }}</span>
+                  <img v-if="iconSrc(site.url)" :src="iconSrc(site.url)" alt="" aria-hidden="true" loading="lazy"
+                    decoding="async" class="relative w-5 h-5 object-contain" @error="onIconError" />
                 </div>
 
-                <button @click="toggleTheme"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-all duration-150 text-slate-500 dark:text-slate-400 relative overflow-hidden group">
-                    <Transition name="slide-up" mode="out-in">
-                        <Sun v-if="isDark" :key="'sun'" class="w-4 h-4 text-amber-500" />
-                        <Moon v-else :key="'moon'" class="w-4 h-4" />
-                    </Transition>
-                </button>
-            </header>
-
-            <article class="p-6 lg:p-10 w-full mx-auto">
-
-                <div v-for="(item, gIdx) in navData" :key="gIdx">
-
-                    <template v-for="group in (item.children ? item.children : [item])" :key="group?.id">
-
-                        <section v-if="group?.id && displayData[group.id]" :id="group.id"
-                            class="mb-12 scroll-mt-24 category-section">
-
-                            <div class="flex items-center gap-3 mb-6">
-                                <span class="w-1.5 h-4 bg-blue-500 rounded-full"></span>
-                                <h2 class="text-base font-medium text-slate-800 dark:text-slate-100 tracking-tight">
-                                    {{ group.name }}
-                                </h2>
-                            </div>
-
-                            <div
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-
-                                <a v-for="site in displayData[group.id]" :key="site.title" :href="site.url"
-                                    target="_blank" rel="noopener noreferrer nofollow" class="group flex items-start gap-3.5 
-                                    px-3 py-3 rounded-lg
-                                    bg-white dark:bg-[#15171e]
-                                    border border-slate-200/50 dark:border-white/[0.04]
-                                    hover:border-blue-500/40
-                                    hover:shadow-md hover:shadow-blue-500/5
-                                    hover:-translate-y-0.5
-                                    transition-all duration-150">
-
-                                    <div
-                                        class="w-8 h-8 shrink-0 rounded-md bg-slate-50 dark:bg-[#1e1e24] flex items-center justify-center border border-slate-200/30 dark:border-white/[0.02] group-hover:scale-105 transition-transform duration-150">
-
-                                        <img :src="`https://icon.horse/icon/${getDomain(site.url)}`" :alt="site.title"
-                                            class="w-4.5 h-4.5 object-contain"
-                                            @error="(e) => e.target.src = 'https://api.iconify.design/lucide:globe.svg'" />
-                                    </div>
-
-                                    <div class="flex-1 min-w-0">
-
-                                        <div class="flex items-center gap-1">
-                                            <h3
-                                                class="text-[13px] font-medium text-slate-800 dark:text-slate-100 truncate group-hover:text-blue-500 transition-colors duration-150">
-                                                {{ site.title }}
-                                            </h3>
-
-                                            <span
-                                                class="text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150">
-                                                ↗
-                                            </span>
-                                        </div>
-
-                                        <p
-                                            class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2 leading-4">
-                                            {{ site.desc }}
-                                        </p>
-
-                                    </div>
-
-                                </a>
-
-                            </div>
-
-                        </section>
-
-                    </template>
-
+                <div class="flex-1 min-w-0 pr-4">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="text-card-title text-ink truncate">{{ site.title }}</h3>
+                    <ArrowUpRight class="nav-icon w-3 h-3 text-ink-tertiary group-hover:text-ink shrink-0 transition-[color,transform] duration-[160ms] group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" aria-hidden="true" />
+                  </div>
+                  <p class="text-caption text-ink-subtle mt-1.5 line-clamp-2 leading-[18px]">{{ site.desc }}</p>
                 </div>
 
-            </article>
+                <span role="button" tabindex="0"
+                  :aria-label="isFavorite(site.url) ? `取消收藏 ${site.title}` : `收藏 ${site.title}`"
+                  :title="isFavorite(site.url) ? '取消收藏' : '收藏到我的导航'"
+                  @click.prevent.stop="toggleFav(site)" @keydown.enter.prevent.stop="toggleFav(site)"
+                  @keydown.space.prevent.stop="toggleFav(site)"
+                  :class="[
+                    'fav-toggle absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-control cursor-pointer',
+                    isFavorite(site.url) ? 'is-favorite text-ink' : 'text-ink-tertiary hover:text-ink hover:bg-surface-3'
+                  ]">
+                  <Star class="nav-icon w-3.5 h-3.5" :fill="isFavorite(site.url) ? 'currentColor' : 'none'" aria-hidden="true" />
+                </span>
+              </a>
+            </div>
+          </section>
+        </template>
+      </div>
 
-            <footer
-                class="mt-auto py-8 text-center border-t border-gray-200/40 dark:border-white/[0.03] bg-white/30 dark:bg-black/10 transition-colors duration-300">
-                <p class="text-[10px] font-medium text-slate-400">Copyright © 2026 <a
-                        href="https://nav.leanku.com">LeanNav</a>
-                    · 开发者导航 · design by <a href="https://blog.leanku.com/" target="__black"
-                        class="dark:bg-black/50">Leanku</a>
-                </p>
-            </footer>
-        </main>
+      <div v-if="searchQuery.trim() && !resultCount" class="py-20">
+        <SearchX class="nav-icon w-9 h-9 mb-4 text-ink-tertiary" aria-hidden="true" />
+        <p class="text-section text-ink">没有找到与「{{ searchQuery }}」相关的资源</p>
+        <p class="text-body text-ink-subtle mt-2">换个更短的关键词，或试试这些常用词：</p>
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <button v-for="word in suggestions" :key="word" @click="searchQuery = word" type="button"
+            class="min-h-[44px] px-3 rounded-control border border-hairline text-body text-ink-muted hover:border-hairline-strong hover:text-ink transition-colors">
+            {{ word }}
+          </button>
+        </div>
+        <button @click="onClearSearch" type="button"
+          class="mt-6 min-h-[44px] px-5 text-body rounded-control bg-primary hover:bg-primary-hover text-on-primary transition press">清空搜索</button>
+      </div>
+    </article>
 
-        <Transition name="fade">
-            <button v-show="showBackToTop" @click="scrollToTop"
-                class="fixed bottom-8 right-8 z-50 w-10 h-10 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all duration-150 shadow-blue-500/20">
-                <ChevronDown class="w-5 h-5 rotate-180" />
-            </button>
-        </Transition>
-    </div>
+    <AppFooter />
+  </AppShell>
+
+  <NavEditor :key="editorKey" v-model:open="editorOpen" :config="config" :source="source"
+    @save="onSaveConfig" @reset="onResetConfig" />
+
+  <Transition name="fade">
+    <button v-show="showBackToTop" @click="scrollToTop" type="button" aria-label="回到顶部" title="回到顶部"
+      class="fixed bottom-8 right-8 z-50 w-11 h-11 bg-primary text-on-primary rounded-control flex items-center justify-center hover:bg-primary-hover transition duration-[160ms] press">
+      <ChevronDown class="nav-icon w-5 h-5 rotate-180" aria-hidden="true" />
+    </button>
+  </Transition>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
-import { navConfig } from '@/data/nav.js'
-import { useSiteData } from '@/utils/index.js'
-import { Zap, Sun, Moon, ChevronDown, Menu, Search, Compass, Milestone } from 'lucide-vue-next'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
+import { ChevronDown, Star, Clock3, SearchX, ArrowUpRight } from 'lucide-vue-next'
+import { useNavConfig, listCategories } from '@/composables/useNavConfig'
+import { useFavorites } from '@/composables/useFavorites'
+import localIcons from '@/data/local-icons.json'
+import NavEditor from '@/components/NavEditor.vue'
+import AppShell from '@/components/AppShell.vue'
 
-const siteData = useSiteData()
-const navData = navConfig
+const route = useRoute()
+const { config, source, init, save, reset } = useNavConfig()
+const {
+  favorites, recent, init: initFavorites, isFavorite,
+  toggle: toggleFavorite, remove: removeFavorite, recordVisit,
+} = useFavorites()
+
+const navData = computed(() => config.value.groups)
+const shellRef = ref(null)
 
 const getDomain = (url) => {
-    try {
-        return new URL(url).hostname
-    } catch {
-        return ''
-    }
+  try { return new URL(url).hostname.toLowerCase() } catch { return '' }
 }
+const iconFiles = localIcons.files || {}
+// 241 张卡片会反复调用 iconSrc；按 url 缓存，避免每次渲染都做 URL 解析
+const iconSrcCache = new Map()
+/** 内置站点全部走本地图标（零外部请求）；只有自定义/分享/站点配置里的新域名才尝试在线 favicon，失败仍有首字母色块兜底 */
+const iconSrc = (url) => {
+  if (iconSrcCache.has(url)) return iconSrcCache.get(url)
+  const host = getDomain(url)
+  const src = !host ? ''
+    : iconFiles[host] ? `/icons/${iconFiles[host]}`
+    : source.value === 'default' ? '' : `https://icon.horse/icon/${host}`
+  iconSrcCache.set(url, src)
+  return src
+}
+const onIconError = (event) => { event.target.style.display = 'none' }
+
+// 墨色 4 级明度只写在 main.css 的 --accent-1..4；颜色不承担导航功能
+const hashOf = (text) => {
+  let hash = 0
+  for (const ch of (text || '?')) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0
+  return hash
+}
+const accentOf = (id) => `var(--accent-${hashOf(id) % 4 + 1})`
 
 useSeoMeta({
-    title: 'LeanNav | 精选开发者导航',
-    ogTitle: 'LeanNav - 极速、简洁的开发者导航利器',
-    description: '汇集全球优质编程资源、设计素材和实用工具，为开发者提供最高效的上网导航。',
-    ogDescription: '汇集全球优质编程资源、设计素材和实用工具。',
-    ogImage: 'https://nva.leanku.com/og-image.png',
-    twitterCard: 'summary_large_image',
+  title: 'LeanNav | 精选开发者导航',
+  ogTitle: 'LeanNav - 极速、简洁的开发者导航利器',
+  description: '汇集全球优质编程资源、设计素材和实用工具，为开发者提供最高效的上网导航。',
+  ogDescription: '汇集全球优质编程资源、设计素材和实用工具。',
+  ogImage: 'https://nav.leanku.com/og-image.png',
+  twitterCard: 'summary_large_image',
+  twitterImage: 'https://nav.leanku.com/og-image.png',
 })
 
-useHead({
-    script: [
-        {
-            type: 'application/ld+json',
-            children: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "ItemList",
-                "itemListElement": navData.map((item, index) => ({
-                    "@type": "ListItem",
-                    "position": index + 1,
-                    "name": item.name,
-                    "url": `https://nva.leanku.com/#${item.id}`
-                }))
-            })
-        }
-    ]
+/* 结构化数据只列出真实存在的栏目锚点 */
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: listCategories(config.value)
+    .filter((category) => category.sites.length)
+    .map((category, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: category.name,
+      url: `https://nav.leanku.com/#${category.id}`,
+    })),
 })
+useHead({ script: [{ type: 'application/ld+json', children: structuredData }] })
 
-/* 响应式状态 */
-const isDark = ref(false)
-const isCollapsed = ref(false)
-const isMobile = ref(false)
+/* ---------- 状态 ---------- */
 const searchQuery = ref('')
-const isMounted = ref(false)
 const showBackToTop = ref(false)
-const activeCategory = ref('') // 当前激活的子菜单或栏目ID
+const activeCategory = ref('')
+const collapsedGroups = ref([])
+const manualGroups = ref(new Set())
+const editorOpen = ref(false)
+const editorKey = ref(0)
+const suggestions = ['AI', 'GitHub', '设计', '文档', '工具']
 
-const flatNav = computed(() => {
-    const res = []
+const toggleFav = (site) => toggleFavorite(site)
 
-    navData.forEach(item => {
-        if (item?.id) {
-            res.push({
-                id: item.id,
-                name: item.name,
-                icon: item.icon
-            })
-        }
+/* 「只展开当前」：随滚动高亮展开所在分组，其余收起；
+   用户手动点开或收起后，该分组状态不再被滚动联动改写；主动点击栏目或刷新后恢复联动。 */
+const groupIds = computed(() => navData.value.filter((group) => group.children?.length).map((group) => group.id))
+function syncGroupExpansion(activeId) {
+  const owner = navData.value.find((group) => group.children?.some((child) => child.id === activeId))?.id
+    || groupIds.value[0] || ''
+  const next = new Set(groupIds.value)
+  if (owner) next.delete(owner)
+  manualGroups.value.forEach((id) => {
+    if (collapsedGroups.value.includes(id)) next.add(id)
+    else next.delete(id)
+  })
+  collapsedGroups.value = [...next]
+}
+watch(activeCategory, syncGroupExpansion, { immediate: true })
 
-        if (item?.children) {
-            item.children.forEach(child => {
-                if (!child?.id) return
-                res.push({
-                    id: child.id,
-                    name: child.name,
-                    icon: child.icon || item.icon
-                })
-            })
-        }
-    })
-
-    return res
-})
-
-const collapsedGroups = ref(
-    navData.map((item, index) => item.children ? index : null).filter(i => i !== null && i !== 0)
-)
-
-/* 方法 */
-const toggleTheme = () => {
-    isDark.value = !isDark.value
-    applyTheme()
+const toggleGroup = (id) => {
+  manualGroups.value = new Set([...manualGroups.value, id])
+  collapsedGroups.value = collapsedGroups.value.includes(id)
+    ? collapsedGroups.value.filter((item) => item !== id)
+    : [...collapsedGroups.value, id]
 }
 
-const applyTheme = () => {
-    const html = document.documentElement
-
-    html.classList.add('theme-transition')
-
-    if (isDark.value) {
-        html.classList.add('dark')
-        localStorage.setItem('theme', 'dark')
-    } else {
-        html.classList.remove('dark')
-        localStorage.setItem('theme', 'light')
-    }
-
-    setTimeout(() => {
-        html.classList.remove('theme-transition')
-    }, 200)
-}
-
-const toggleMenu = () => isCollapsed.value = !isCollapsed.value
-
-const handleTopLevelNavClick = () => {
-    if (isMobile.value) isCollapsed.value = true
-    collapsedGroups.value = navData
-        .map((item, i) => (item.children ? i : null))
-        .filter(itemIdx => itemIdx !== null)
-}
-
-const handleChildNavClick = () => {
-    if (isMobile.value) isCollapsed.value = true
-}
-
-const toggleGroup = (idx) => {
-    const isCurrentlyCollapsed = collapsedGroups.value.includes(idx)
-
-    if (isCurrentlyCollapsed) {
-        // 展开，收起其他同级
-        collapsedGroups.value = navData
-            .map((item, i) => (item.children ? i : null))
-            .filter(itemIdx => itemIdx !== null && itemIdx !== idx)
-    } else {
-        // 仅收起当前组
-        const newCollapsed = [...collapsedGroups.value]
-        if (!newCollapsed.includes(idx)) {
-            newCollapsed.push(idx)
-        }
-        collapsedGroups.value = newCollapsed
-    }
-}
-
-const isGroupActive = (item) => {
-    if (!item.children) return false
-    return item.children.some(child => child.id === activeCategory.value)
-}
-
-const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
-
-const checkScreen = () => {
-    isMobile.value = window.innerWidth < 1024
-    if (isMobile.value) isCollapsed.value = true
-}
-
-const handleScroll = () => {
-    showBackToTop.value = window.scrollY > 500
-
-    const sections = document.querySelectorAll('.category-section')
-    let currentId = ''
-
-    const offset = 100
-
-    sections.forEach((section) => {
-        const top = section.getBoundingClientRect().top
-        if (top - offset <= 0) {
-            currentId = section.getAttribute('id')
-        }
-    })
-
-    if (currentId) {
-        activeCategory.value = currentId
-    }
-}
-
-watch(activeCategory, (newVal) => {
-    if (!newVal) return
-    navData.forEach((item, index) => {
-        if (item.children) {
-            const hasChild = item.children.some(child => child.id === newVal)
-            if (hasChild) {
-                if (collapsedGroups.value.includes(index)) {
-                    collapsedGroups.value = navData
-                        .map((it, idx) => (it.children ? idx : null))
-                        .filter(itemIdx => itemIdx !== null && itemIdx !== index)
-                }
-            }
-        }
-    })
-})
-
+/* ---------- 搜索 ---------- */
+const leafCategories = computed(() => listCategories(config.value))
+const queryTokens = computed(() => searchQuery.value.trim().toLowerCase().split(/\s+/).filter(Boolean))
 const displayData = computed(() => {
-    const q = searchQuery.value.trim().toLowerCase()
-    if (!q) return siteData
-    const res = {}
-
-    const categoryInfo = {}
-    navData.forEach(item => {
-        if (item.id) {
-            categoryInfo[item.id] = item.name.toLowerCase()
-        }
-        if (item.children) {
-            item.children.forEach(child => {
-                if (child.id) categoryInfo[child.id] = child.name.toLowerCase()
-            })
-        }
-    })
-
-    Object.keys(siteData).forEach(id => {
-        const categoryName = categoryInfo[id] || ''
-        const isCategoryMatch = categoryName.includes(q)
-
-        if (isCategoryMatch) {
-            if (siteData[id] && siteData[id].length) {
-                res[id] = siteData[id]
-            }
-        } else {
-            const matchSites = siteData[id].filter(s =>
-                s.title.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q)
-            )
-            if (matchSites.length) {
-                res[id] = matchSites
-            }
-        }
-    })
-    return res
+  const tokens = queryTokens.value
+  const result = {}
+  leafCategories.value.forEach((category) => {
+    const sites = (category.sites || []).filter((site) => site.title && site.url)
+    const matched = tokens.length
+      ? sites.filter((site) => {
+          const text = `${site.title} ${site.desc} ${getDomain(site.url)} ${category.name} ${category.groupName}`.toLowerCase()
+          return tokens.every((token) => text.includes(token))
+        })
+      : sites
+    if (matched.length) result[category.id] = matched
+  })
+  return result
 })
+const resultCount = computed(() => Object.values(displayData.value).reduce((sum, sites) => sum + sites.length, 0))
+const firstResult = computed(() => Object.values(displayData.value).find((sites) => sites.length)?.[0] || null)
 
-/* 生命周期 */
-onMounted(() => {
+function onClearSearch() { searchQuery.value = '' }
+function openFirstResult() {
+  if (!searchQuery.value.trim()) { shellRef.value?.focusSearch(); return }
+  if (firstResult.value) {
+    recordVisit(firstResult.value)
+    window.open(firstResult.value.url, '_blank', 'noopener,noreferrer')
+  }
+}
+function onKeydown(event) {
+  if (editorOpen.value) return
+  // 用户主动滚动时立刻交还高亮联动权
+  if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) releaseNavLock()
+  const target = event.target
+  const typing = target instanceof HTMLElement &&
+    (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault()
+    shellRef.value?.focusSearch()
+  } else if (event.key === '/' && !typing && !event.metaKey && !event.ctrlKey) {
+    event.preventDefault()
+    shellRef.value?.focusSearch()
+  }
+}
+
+/* ---------- 滚动联动 ----------
+   不能用「相交集合里 top 最小的分区」判定当前栏目：已经滚上去的旧分区 top 更小，
+   会被误当成当前项。页面底部最后几个分区受滚动上限约束，永远到不了判定线，
+   旧实现因此会在点击底部栏目、锁定期结束后把高亮跳回上一项。
+   现在统一按「阅读线」判定：取最后一个越过阅读线的栏目；触底时直接认最后一个栏目。
+   点击 / 改 hash 先锁定点击项，平滑滚动停稳后继续保持，直到用户再次主动滚动
+   才恢复联动，避免滚动途中一路点亮沿途分区。 */
+const READING_LINE = 160 // scroll-mt-24 为 96px，再留一段卡片高度的容差
+let observer = null
+let scrollRaf = 0
+let activeRaf = 0
+let pendingActiveTimer = 0
+let pendingActiveId = ''
+let anchorLock = false
+let anchorSettled = false
+let anchorSettledY = 0
+let anchorSettleTimer = 0
+
+function sectionElements() {
+  return [...document.querySelectorAll('.category-section')]
+}
+function activeIdAtScroll() {
+  const sections = sectionElements()
+  if (!sections.length) return ''
+  // 触底后最后一个分区可能整体停在阅读线下方，此时它才是用户正在看的内容
+  const doc = document.documentElement
+  if (window.scrollY + window.innerHeight >= doc.scrollHeight - 2) {
+    return sections[sections.length - 1].id
+  }
+  let current = sections[0].id
+  for (const section of sections) {
+    if (section.getBoundingClientRect().top <= READING_LINE) current = section.id
+    else break
+  }
+  return current
+}
+function commitActive(id) {
+  if (id && id !== activeCategory.value) activeCategory.value = id
+}
+function scheduleActive(id) {
+  if (!id || id === activeCategory.value || id === pendingActiveId) return
+  pendingActiveId = id
+  clearTimeout(pendingActiveTimer)
+  // content-visibility 懒渲染会改变未渲染分区的高度，边界处短去抖避免来回切
+  pendingActiveTimer = setTimeout(() => { commitActive(id); pendingActiveId = '' }, 90)
+}
+function requestRecompute() {
+  if (activeRaf) return
+  activeRaf = requestAnimationFrame(() => {
+    activeRaf = 0
+    if (!anchorLock) scheduleActive(activeIdAtScroll())
+  })
+}
+function lockNavHighlight(id) {
+  clearTimeout(pendingActiveTimer)
+  pendingActiveId = ''
+  commitActive(id)
+  anchorLock = true
+  anchorSettled = false
+  clearTimeout(anchorSettleTimer)
+  // 锚点本来就在视口内时不会产生 scroll 事件，兜底也要进入「已停稳」状态
+  anchorSettleTimer = setTimeout(() => { anchorSettled = true; anchorSettledY = window.scrollY }, 700)
+}
+function releaseNavLock() {
+  if (!anchorLock) return
+  anchorLock = false
+  anchorSettled = false
+  clearTimeout(anchorSettleTimer)
+  requestRecompute()
+}
+function setupObserver() {
+  observer?.disconnect()
+  if (typeof IntersectionObserver === 'undefined') return
+  // 只作为「布局发生变化」的信号：content-visibility 懒渲染会改变文档高度
+  observer = new IntersectionObserver(requestRecompute, { threshold: [0, 0.01, 0.5] })
+  sectionElements().forEach((element) => observer.observe(element))
+}
+function onScroll() {
+  if (anchorLock) {
+    clearTimeout(anchorSettleTimer)
+    anchorSettleTimer = setTimeout(() => { anchorSettled = true; anchorSettledY = window.scrollY }, 160)
+    // 停稳之后的位移才是用户自己滚的；滚动途中的位移属于程序化平滑滚动
+    if (anchorSettled && Math.abs(window.scrollY - anchorSettledY) > 2) releaseNavLock()
+  }
+  if (scrollRaf) return
+  scrollRaf = requestAnimationFrame(() => {
+    scrollRaf = 0
+    showBackToTop.value = window.scrollY > 500
+    if (!anchorLock) scheduleActive(activeIdAtScroll())
+  })
+}
+function onResize() {
+  if (anchorLock) releaseNavLock()
+  else requestRecompute()
+}
+function onHashChange() {
+  const id = decodeURIComponent(window.location.hash.slice(1))
+  if (id && document.getElementById(id)?.classList.contains('category-section')) lockNavHighlight(id)
+}
+const onNavigate = (id) => {
+  manualGroups.value = new Set()
+  lockNavHighlight(id)
+  syncGroupExpansion(id)
+}
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  const first = Object.keys(displayData.value)[0] || ''
+  if (first) lockNavHighlight(first)
+}
+watch(displayData, () => nextTick(() => {
+  releaseNavLock()
+  setupObserver()
+  onScroll()
+  const ids = sectionElements().map((element) => element.id)
+  if (activeCategory.value && !ids.includes(activeCategory.value)) commitActive(ids[0] || '')
+}))
+
+/* ---------- 编辑器回调 ---------- */
+const onSaveConfig = (nextConfig) => {
+  save(nextConfig)
+  nextTick(() => { setupObserver(); onScroll() })
+}
+const onResetConfig = () => {
+  reset()
+  editorKey.value += 1
+  nextTick(() => { setupObserver(); onScroll() })
+}
+
+/* ---------- 生命周期 ---------- */
+onMounted(async () => {
+  initFavorites()
+
+  await init()
+  iconSrcCache.clear()
+  if (!activeCategory.value) activeCategory.value = Object.keys(displayData.value)[0] || ''
+  syncGroupExpansion(activeCategory.value)
+
+  const q = route.query.q
+  if (typeof q === 'string' && q) searchQuery.value = q
+  if (route.query.editor === '1') editorOpen.value = true
+
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('keydown', onKeydown)
+  window.addEventListener('wheel', releaseNavLock, { passive: true })
+  window.addEventListener('touchstart', releaseNavLock, { passive: true })
+  window.addEventListener('resize', onResize)
+  window.addEventListener('hashchange', onHashChange)
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.style.scrollBehavior = 'smooth'
-
-    const savedStatus = localStorage.getItem('menu_collapsed')
-    isCollapsed.value = savedStatus !== null ? savedStatus === 'true' : window.innerWidth < 1024
-
-    const theme = localStorage.getItem('theme')
-    isDark.value = theme ? theme === 'dark' : true
-    applyTheme()
-
-    checkScreen()
-    window.addEventListener('resize', checkScreen)
-    window.addEventListener('scroll', handleScroll)
-
-    setTimeout(() => {
-        handleScroll()
-        isMounted.value = true
-    }, 50)
+  }
+  nextTick(() => { setupObserver(); onScroll() })
 })
 
 onUnmounted(() => {
-    window.removeEventListener('resize', checkScreen)
-    window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('wheel', releaseNavLock)
+  window.removeEventListener('touchstart', releaseNavLock)
+  window.removeEventListener('resize', onResize)
+  window.removeEventListener('hashchange', onHashChange)
+  observer?.disconnect()
+  if (scrollRaf) cancelAnimationFrame(scrollRaf)
+  if (activeRaf) cancelAnimationFrame(activeRaf)
+  clearTimeout(anchorSettleTimer)
+  clearTimeout(pendingActiveTimer)
+  document.documentElement.style.scrollBehavior = ''
 })
-
-watch(isCollapsed, v => localStorage.setItem('menu_collapsed', String(v)))
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-.font-inter {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-.theme-transition,
-.theme-transition * {
-    transition:
-        background-color 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease,
-        fill 0.25s ease !important;
-}
-
-.cubic-bezier {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-
-.slide-up-enter-active,
-.slide-up-leave-active {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.slide-up-enter-from {
-    transform: translateY(8px);
-    opacity: 0;
-}
-
-.slide-up-leave-to {
-    transform: translateY(-8px);
-    opacity: 0;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 10px;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-    background: #1e1e24;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
-}
-
-.not-mounted {
-    transition: none !important;
-}
-</style>

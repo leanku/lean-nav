@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全漏洞报告
+    url: https://github.com/leanku/lean-nav/security/advisories/new
+    about: 请勿公开提交安全相关问题，请走私密漏洞报告通道。

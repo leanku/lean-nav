@@ -1,0 +1,71 @@
+// 全站唯一的 Lucide 图标注册表。DESIGN.md 第 6 节：stroke-width 1.75，
+// 分组与栏目各配唯一语义图标，禁止 Image×4 / BookOpen×3 这类复用。
+import {
+  Star, Newspaper, BrainCircuit, Lightbulb, Boxes, Code2, Wrench, Library, Info,
+  MessagesSquare, Bot, Palette, WandSparkles, Sparkles, PenTool, Shapes, Images,
+  Package, Terminal, AppWindow, Server, Database, GitBranch, Cloud, Puzzle,
+  FileText, Image, Link2, Zap, Blocks, BookOpen, GraduationCap,
+  Globe, Compass, Box, Layout, Chrome, Milestone, Dock, Wand2, Code,
+  LayoutGrid, Layers, Folder, Hash, Bookmark, Rocket, Cpu, Monitor, Brush,
+} from 'lucide-vue-next'
+
+const iconMap = {
+  Star, Newspaper, BrainCircuit, Lightbulb, Boxes, Code2, Wrench, Library, Info,
+  MessagesSquare, Bot, Palette, WandSparkles, Sparkles, PenTool, Shapes, Images,
+  Package, Terminal, AppWindow, Server, Database, GitBranch, Cloud, Puzzle,
+  FileText, Image, Link2, Zap, Blocks, BookOpen, GraduationCap,
+  Globe, Compass, Box, Layout, Chrome, Milestone, Dock, Wand2, Code,
+  LayoutGrid, Layers, Folder, Hash, Bookmark, Rocket, Cpu, Monitor, Brush,
+}
+
+export const iconOf = (name) => iconMap[name] || Globe
+
+/** 编辑器图标网格的可选项。前 32 个是当前默认配置正在使用的图标。 */
+export const ICON_OPTIONS = [
+  { name: 'Star', label: '常用推荐' },
+  { name: 'Newspaper', label: '资讯' },
+  { name: 'BrainCircuit', label: 'AI 智能' },
+  { name: 'Lightbulb', label: '灵感' },
+  { name: 'Boxes', label: '资源集合' },
+  { name: 'Code2', label: '开发' },
+  { name: 'Wrench', label: '工具' },
+  { name: 'Library', label: '知识库' },
+  { name: 'Info', label: '说明' },
+  { name: 'MessagesSquare', label: '对话' },
+  { name: 'Bot', label: '智能体' },
+  { name: 'Palette', label: '绘图 / 配色' },
+  { name: 'WandSparkles', label: '效率魔法' },
+  { name: 'Sparkles', label: '创意' },
+  { name: 'PenTool', label: '设计工具' },
+  { name: 'Shapes', label: '图标素材' },
+  { name: 'Images', label: '图片资源' },
+  { name: 'Package', label: '软件仓储' },
+  { name: 'Terminal', label: '终端' },
+  { name: 'AppWindow', label: '前端' },
+  { name: 'Server', label: '后端' },
+  { name: 'Database', label: '数据库' },
+  { name: 'GitBranch', label: 'DevOps' },
+  { name: 'Cloud', label: '云原生' },
+  { name: 'Puzzle', label: '浏览器插件' },
+  { name: 'FileText', label: '文档处理' },
+  { name: 'Image', label: '图片处理' },
+  { name: 'Link2', label: '在线工具' },
+  { name: 'Zap', label: '效率应用' },
+  { name: 'Blocks', label: '其他工具' },
+  { name: 'BookOpen', label: '教程文档' },
+  { name: 'GraduationCap', label: '课程' },
+  { name: 'Globe', label: '网站 / 通用' },
+  { name: 'Compass', label: '探索发现' },
+  { name: 'Folder', label: '文件夹' },
+  { name: 'Bookmark', label: '书签' },
+  { name: 'Rocket', label: '新项目' },
+  { name: 'Cpu', label: '硬件 / 计算' },
+  { name: 'Monitor', label: '桌面软件' },
+  { name: 'Brush', label: '绘画' },
+  { name: 'Layers', label: '层级 / 堆栈' },
+  { name: 'LayoutGrid', label: '网格 / 聚合' },
+  { name: 'Hash', label: '标签' },
+  { name: 'Milestone', label: '成长目标' },
+  { name: 'Chrome', label: '浏览器' },
+  { name: 'Box', label: '仓库' },
+]
