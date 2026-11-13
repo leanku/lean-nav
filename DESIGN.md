@@ -164,8 +164,8 @@ CSS 变量挂 `:root` / `.dark`，Tailwind 的 `theme.extend.colors` 引用 `var
 - **侧栏图标**：Lucide，`stroke-width: 1.75`；分组 18px **裸图标**直接落在画布上（不包底片、无圆角框），颜色继承所在行的 `text-*`，子项 14px 图标。9 个分组 + 26 个栏目各配**唯一**语义图标，禁止 `Image`×4 / `BookOpen`×3 这类复用；`nav.js` 的 `icon` 字段必须真正渲染到子项。
 - **侧栏激活态**：激活行 `bg-surface-3 text-ink`（图标随之变墨色），hover 行 `bg-surface-2`，**不叠加任何独立指示物**（竖条 / 圆点 / 左侧色块）——它们与圆角行的几何语言冲突，折叠态孤立，二级还会与引导线叠成多重线索。**不换字重、不挂卸伪元素、不用色相**——三者都会让文字宽度或列表高度跳动。
 - **侧栏二级缩进**：子项容器 `ml-[22px] pl-2 border-l border-hairline`，1px 引导线对齐分组图标中心；子项文字比分组文字再右移约 15px。层级由缩进和细线表达，不靠颜色。
-- **侧栏分组**：**默认全部收起**，只显示顶层分类；用户手动展开的分组写入 `localStorage`（`leannav:groups:v1`），刷新/跨页面保留。滚动只负责高亮，不改写分组展开状态，避免用户手动收起后被联动抢回控制权；手风琴可多开。状态逻辑集中在 `useGroupExpansion` composable，首页与 about 共用；读取放在 `onMounted`，避免 `nuxt generate` 预渲染时 SSR/hydration 不一致。
-- **滚动高亮锁定**：点击栏目 / 改 hash 时立即把最终高亮设好并用 `anchorLock` 锁住，平滑滚动沿途的 section 不参与联动；滚动停稳后仍保持点击项，直到用户滚轮 / 触摸 / 方向键操作才恢复联动。去抖 140ms 防止快速掠过多个分区时逐一点亮。高亮不驱动分组展开。
+- **侧栏分组**：**默认全部收起**，只显示顶层分类，**单开手风琴**——展开一个分组会收起其他。滚动高亮到某分组时自动展开它（跟随），用户手动收起的分组在本次停留内不会被自动展开，滑出后解除。手动展开的那个 id 写入 `localStorage`（`leannav:groups:v1`），滚动跟随不写盘——记忆只记录手动选择。状态逻辑集中在 `useGroupExpansion` composable，首页与 about 共用；读取放在 `onMounted`，避免 `nuxt generate` 预渲染时 SSR/hydration 不一致。
+- **滚动高亮锁定**：点击栏目 / 改 hash 时立即把最终高亮设好并用 `anchorLock` 锁住，平滑滚动沿途的 section 不参与联动；滚动停稳后仍保持点击项，直到用户滚轮 / 触摸 / 方向键操作才恢复联动。去抖 140ms 防止快速掠过多个分区时逐一点亮。高亮会展开所属分组并收起其他（单开）。
 - **侧栏 logo 与图标对齐**：logo 用与菜单 `iconBox` 同宽的 32px 透明盒（`AppLogo` 的 `boxed`）；左内边距展开 24px / 折叠 20px 用 CSS 过渡，图标中心恒为 40px / 36px，与菜单图标全程对齐（含过渡中间帧）。文字、箭头常驻 DOM 由 CSS 淡出收拢，不用 `v-if` 硬切。
 - **顶栏**：三区网格（见第 5 节），搜索居中（`role=search`；⌘K / `/` 聚焦，Esc 清空，回车开首个结果，`role=status` 播报结果数）；右侧 GitHub → 自定义 → 主题，keycap 用 mono。about / customize 页把中区换成左对齐页面标题。半透明玻璃底 + 20px 模糊；`focus-within` 时 200ms 长出 **2px `--focus-ring` 细环 + 10px `--focus-glow` 渐隐柔光**，不画 1px 高对比线，鼠标点击与键盘 Tab 得到同一套反馈。hover 不动边框色。
 - **站点卡片**：40px 裸 favicon（无底片、无框；本地图标 → 首字母色块兜底，`alt=""`）、标题 14px、描述单行截断、外链箭头（hover 由 ink-tertiary 转 ink 并右上位移 2px）、右上角收藏星标**默认隐藏，仅 hover / 键盘聚焦 / 已收藏时显现**（触屏 `hover: none` 常显）。网址由挂在 body 的 `position:fixed` 气泡承担，贴在卡片下方、空间不足自动翻上方。默认 L1（仅 1px hairline，无 inset 高光），hover 升 L2——**只换底色 surface-2，边框恒定**；卡片本身不位移、不缩放。
@@ -230,7 +230,7 @@ CSS 变量挂 `:root` / `.dark`，Tailwind 的 `theme.extend.colors` 引用 `var
 
 ### 数据与性能
 - **懒渲染用 CSS**：`.category-section { content-visibility: auto }`，SSR 仍输出全部分区与卡片（SEO 完整），不靠 JS 隐藏；滚动高度不跳动。
-- **分组状态**：默认全部收起，用户手动展开的分组写入 `localStorage`；滚动联动只负责高亮，不改写分组展开状态（详见第 6 节侧栏分组）。
+- **分组状态**：默认全部收起，单开手风琴；滚动高亮到某分组时自动展开它并收起其他，手动展开的 id 写入 `localStorage`（详见第 6 节侧栏分组）。
 - **焦点管理分工**：自定义抽屉是模态（Esc 关闭、Tab 锁在面板内、关闭归还焦点）；`/customize` 独立页本身即编辑器，不做 focus trap（否则顶栏不可达），用「完成」作为明确出口。
 - **性能地板**：默认零外部字体 / 图标 / 统计请求；本地字体栈 + 中文回退；可选统计脚本延后到 `requestIdleCallback`。
 - **不改技术栈**：Nuxt 4 + Vue 3 + Tailwind + `nuxt generate`，纯静态、零后端。

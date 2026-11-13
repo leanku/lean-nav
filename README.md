@@ -65,7 +65,7 @@ NUXT_PUBLIC_SITE_URL=https://example.com npm run generate
 - 首页 `/`、关于页 `/about` 共用 `AppShell`（侧栏 + 顶栏 + 页脚 + 主题）；`/customize` 是独立编辑页
 - 搜索：`/` 或 `⌘K` / `Ctrl+K` 聚焦，`Esc` 清空，回车打开首个结果
 - 主题：首屏内联脚本决定，默认跟随系统偏好；亮/暗只换 CSS 变量；`prefers-reduced-motion` 自动关闭动效
-- 侧栏：分组默认全部收起，手动展开的分组记在 `localStorage`，滚动只负责高亮、不改写展开状态；点击栏目会锁定高亮直到滚动结束
+- 侧栏：分组默认全部收起、单开手风琴；滚动到某栏目时自动展开所属分组并收起其他，手动收起的分组不会被抢回，手动展开的 id 记在 `localStorage`；点击栏目会锁定高亮直到滚动结束
 - 顶栏：三区网格让搜索在内容区真正居中；右侧 GitHub / 自定义 / 主题
 - 9 个分组 + 26 个栏目各配唯一 Lucide 图标，可在编辑器里更换
 - 性能：视口外 section 用 `content-visibility` 跳过渲染；可选统计脚本延后到浏览器空闲

@@ -260,15 +260,16 @@ useHead({ script: [{ type: 'application/ld+json', children: structuredData }] })
 const searchQuery = ref('')
 const showBackToTop = ref(false)
 const activeCategory = ref('')
-const { collapsedGroups, toggleGroup } = useGroupExpansion(navData)
+const { collapsedGroups, toggleGroup, revealFor } = useGroupExpansion(navData)
 const editorOpen = ref(false)
 const editorKey = ref(0)
 const suggestions = ['AI', 'GitHub', '设计', '文档', '工具']
 
 const toggleFav = (site) => toggleFavorite(site)
 
-/* 分组展开状态见 useGroupExpansion：默认全收起 + 记忆用户选择，
-   不再随滚动高亮自动展开（v1.5 改，原「只展开当前」联动已移除）。 */
+/* 分组展开状态见 useGroupExpansion：默认全收起 + 单开手风琴；
+   滚动高亮到某分组时自动展开它并收起其他，本次停留内被手动收起的分组不会被打扰。 */
+watch(activeCategory, (id) => revealFor(id))
 
 /* ---------- 搜索 ---------- */
 const leafCategories = computed(() => listCategories(config.value))
