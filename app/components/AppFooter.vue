@@ -4,7 +4,7 @@
       <p class="text-caption text-ink-subtle">
         © 2026
         <NuxtLink to="/" class="link">LeanNav</NuxtLink>
-        · 为开发者整理的网址导航 · by
+        · 极简网址导航 · by
         <a href="https://blog.leanku.com/" target="_blank" rel="noopener noreferrer"
           class="link">Leanku</a>
       </p>

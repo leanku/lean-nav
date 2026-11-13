@@ -38,7 +38,7 @@ export default {
       // 第 4 节：不再混用 rounded-lg / rounded-xl / rounded-2xl / bento
       borderRadius: {
         control: '8px',
-        card: '12px',
+        card: '8px',
         popover: '12px',
       },
       fontFamily: {

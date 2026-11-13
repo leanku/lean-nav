@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "type": "module",
   "license": "MIT",
-  "description": "纯静态部署的开发者导航站：无后端、无数据库，访客可在页面内自定义分类与网站。",
+  "description": "纯静态部署的极简导航站：无后端、无数据库，访客可在页面内自定义分类与网站。",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leanku/lean-nav.git"

@@ -6,7 +6,12 @@
    v1.2：补回被 v1.1 一并禁掉的「材质」——中性黑白 ≤8% alpha 的玻璃、微光、
          inset 顶面高光。色相限制一字未放宽，新增变量没有一个带色相。
    v1.3：品牌标记改圆角方形；搜索聚焦与卡片 hover 的边框改为「单线 + 同步柔光」，
-         去掉硬黑边与叠加反馈，新增变量仍是中性黑白 rgba。 */
+         去掉硬黑边与叠加反馈，新增变量仍是中性黑白 rgba。
+   v1.6：线条收敛——hairline 两主题统一减弱一档；hover 一律不动边框色；
+         焦点反馈由「1px 高对比线 + 淡环」改为「无线的双层光圈」（去掉 focus-line）。
+   v1.7：删掉卡片 inset 1px 顶面高光（hover 灰底上会显出断续亮线，是「状态不加线」
+         的漏网之鱼）；焦点环 3px→2px、外层由 4px 硬边实心环换成 10px 高斯柔光，
+         颜色 alpha 不动（被 ≥3:1 非文本对比度锁住），只减面积与硬度。 */
 
 :root {
   color-scheme: light;
@@ -17,13 +22,15 @@
   --surface-2: #EFF0F2;
   --surface-3: #E6E8EB;
   --surface-4: #DEE0E4;
-  --hairline: #E3E5E9;
-  --hairline-strong: #C7CAD1;
+  --hairline: #EBEDF0;              /* v1.6 减弱一档：静止态线条在网格里更安静 */
+  --hairline-strong: #C7CAD1;       /* 仅用于显式强调分隔，不再用于 hover 反馈 */
   --ink: #17191E;
   --ink-muted: #4B515A;
   --ink-subtle: #6C727C;
   --ink-tertiary: #9BA1AA;
   --primary: #17191E;
+  /* 框架阴影：仅用于侧栏/顶栏等 chrome，内容卡片仍零投影；中性、无彩色 */
+  --shadow-frame: 0 1px 2px rgba(23, 25, 30, 0.03), 0 12px 32px -20px rgba(23, 25, 30, 0.16);
   --primary-hover: #343A43;
   --on-primary: #FFFFFF;
   --danger: #B93A32;
@@ -38,19 +45,23 @@
   /* v1.2 材质层：全部中性黑白，无第二色相 */
   --chrome-bg: rgba(247, 248, 250, 0.78);      /* 顶栏半透明玻璃底 */
   --chrome-line: rgba(23, 25, 30, 0.08);        /* 顶栏发丝线 */
-  --card-highlight: rgba(255, 255, 255, 0.9);   /* 卡片顶面高光：白卡上不可见，hover 变灰时显现 */
-  --card-border-hover: rgba(23, 25, 30, 0.28);  /* 卡片 hover 边框（比 hairline-strong 更明确） */
-  --card-edge: rgba(23, 25, 30, 0.08);          /* 卡片 hover 外圈 1px 中性柔光 */
-  --focus-line: rgba(23, 25, 30, 0.72);         /* 搜索聚焦 1px 描边，≥3:1 非文本对比度 */
-  --focus-halo: rgba(23, 25, 30, 0.08);         /* 搜索聚焦环 / 焦点柔光 */
+  /* v1.7：卡片顶面 1px inset 高光已移除——白卡上本就不可见，hover 底色变灰后反而
+     显出一条亮线，沿 8px 圆角被抗锯齿切成断续的「虚线」。材质由顶栏玻璃、首屏微光、
+     框架微投影承担，卡片不再有第二条边。 */
+  /* 焦点：不画 1px 高对比线，改用「2px 内环 + 10px 高斯柔光」的无框光圈。
+     内环 alpha 被 ≥3:1 非文本对比度锁住（亮 3.30:1 / 暗 3.11:1），不能再降；
+     v1.7 只减面积与硬度：环 3→2px，外层由 4px 硬边实心环换成渐隐柔光。 */
+  --focus-ring: rgba(23, 25, 30, 0.50);
+  --focus-glow: rgba(23, 25, 30, 0.10);
   --selection-bg: rgba(23, 25, 30, 0.12);       /* 文字选中 */
   --selection-ink: #17191E;
   --ambient: rgba(255, 255, 255, 0.55);         /* 首屏顶部天空光，极淡 */
 
   /* v1.2 动效：一条缓动曲线 + 按距离分级的时长 */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-hover: 160ms;
+  --dur-hover: 200ms;
   --dur-expand: 240ms;
+  --dur-sidebar: 240ms; /* 侧栏宽度/位移、主内容边距、文字淡出共用，保证三者同步 */
   --dur-drawer: 320ms;
   --dur-theme: 380ms;
   --dur-halo: 200ms;
@@ -61,7 +72,7 @@
   /* v1.4：字体 / 圆角 / 语义背景 token（单一来源，组件与 tailwind 共用） */
   --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --radius-control: 8px;
-  --radius-card: 12px;
+  --radius-card: 8px;
   --radius-popover: 12px;
   --danger-bg: rgba(185, 58, 50, 0.10);
 }
@@ -75,8 +86,8 @@
   --surface-2: #1B1E23;
   --surface-3: #23272D;
   --surface-4: #2A2F36;
-  --hairline: #292D34;
-  --hairline-strong: #3D434C;
+  --hairline: #22262C;              /* v1.6 减弱一档：暗色「提亮线」感知更强，降得比亮色更多 */
+  --hairline-strong: #3D434C;       /* 仅用于显式强调分隔，不再用于 hover 反馈 */
   --ink: #F3F5F6;
   --ink-muted: #C3C9D1;
   --ink-subtle: #9098A2;
@@ -94,11 +105,8 @@
 
   --chrome-bg: rgba(11, 12, 15, 0.72);
   --chrome-line: rgba(255, 255, 255, 0.08);
-  --card-highlight: rgba(255, 255, 255, 0.07);
-  --card-border-hover: rgba(255, 255, 255, 0.2);
-  --card-edge: rgba(255, 255, 255, 0.08);
-  --focus-line: rgba(243, 245, 246, 0.72);
-  --focus-halo: rgba(243, 245, 246, 0.08);
+  --focus-ring: rgba(243, 245, 246, 0.36);      /* 与画布 3.11:1，≥3:1 下限，勿再降 */
+  --focus-glow: rgba(243, 245, 246, 0.10);
   --selection-bg: rgba(243, 245, 246, 0.2);
   --selection-ink: #0B0C0F;
   --ambient: rgba(255, 255, 255, 0.04);         /* linear.app 同款 4% 中性白 */
@@ -106,7 +114,132 @@
   --popover-shadow: 0 14px 36px rgba(0, 0, 0, 0.58), 0 1px 2px rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: #3D434C;
   --danger-bg: rgba(228, 106, 98, 0.16);
+  --shadow-frame: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 32px -20px rgba(0, 0, 0, 0.7);
 }
+
+/* 框架层级：侧栏与顶栏加一抹中性微投影，让「外壳浮动、内容平铺」，建立清晰纵深。
+   守无彩色外壳 + 卡片零投影约束——阴影只用于 chrome，不用于内容卡片。 */
+.app-sidebar {
+  box-shadow: var(--shadow-frame);
+  /* 折叠/展开：宽度与位移走同一时长 + 缓动，与 .app-shell-main 的 margin 严格同步 */
+  transition: width var(--dur-sidebar) var(--ease-out),
+              transform var(--dur-sidebar) var(--ease-out);
+}
+.app-header {
+  box-shadow: var(--shadow-frame);
+}
+.app-shell-main {
+  transition: margin-left var(--dur-sidebar) var(--ease-out);
+}
+
+/* ---------- 侧栏折叠动画（v1.5）----------
+   旧实现用 v-if 把文字/箭头瞬间移除，宽度虽在过渡，观感仍是「跳变」。
+   改为常驻 DOM + CSS 淡出/收拢：透明度、最大宽度、左外边距三者一起过渡，
+   与侧栏宽度、主内容边距共用 --dur-sidebar，切换时不再有先后错位。 */
+.sidebar-label,
+.sidebar-chevron,
+.brand-label {
+  max-width: 180px;
+  opacity: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity var(--dur-sidebar) var(--ease-out),
+              max-width var(--dur-sidebar) var(--ease-out),
+              margin-left var(--dur-sidebar) var(--ease-out);
+}
+.sidebar-chevron {
+  max-width: 14px;
+  transition: opacity var(--dur-sidebar) var(--ease-out),
+              max-width var(--dur-sidebar) var(--ease-out),
+              margin-left var(--dur-sidebar) var(--ease-out),
+              transform var(--dur-sidebar) var(--ease-out);
+}
+.app-sidebar.is-narrow .sidebar-label,
+.app-sidebar.is-narrow .sidebar-chevron,
+.app-sidebar.is-narrow .brand-label {
+  max-width: 0;
+  min-width: 0;
+  flex: 0 0 0;
+  margin-left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+/* logo 左内边距过渡：展开 24px（= 菜单外层 12 + 行内 12）、折叠 20px，
+   使 32px 图标盒中心始终与菜单图标盒重合（40px / 36px）。 */
+.sidebar-brand {
+  padding-left: 24px;
+  transition: padding-left var(--dur-sidebar) var(--ease-out);
+}
+.app-sidebar.is-narrow .sidebar-brand { padding-left: 20px; }
+
+/* 行内边距过渡：展开 12px / 折叠 8px。折叠时侧栏 72px - 两侧 px-3(24) = 48px 内容区，
+   32px 图标盒 + 左右各 8px 正好居中 → 图标中心 36px，与 logo 一致。
+   不再用 justify-center 硬切，避免折叠瞬间图标跳位。颜色过渡一并收归此处。 */
+.sidebar-row {
+  padding-left: 12px;
+  padding-right: 12px;
+  transition: padding-left var(--dur-sidebar) var(--ease-out),
+              padding-right var(--dur-sidebar) var(--ease-out),
+              background-color var(--dur-hover) var(--ease-out),
+              color var(--dur-hover) var(--ease-out);
+}
+.app-sidebar.is-narrow .sidebar-row {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* 分组展开/收起：grid-rows 0fr→1fr 做高度过渡，无需测量内容高度；
+   inner 需 min-height:0 + overflow:hidden 才能被压到 0。 */
+.sidebar-sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows var(--dur-sidebar) var(--ease-out),
+              opacity var(--dur-sidebar) var(--ease-out);
+}
+.sidebar-sub.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+/* 折叠态强制收起：比 .is-open 优先级高，保证侧栏收起时二级菜单跟着平滑收拢而非瞬间消失 */
+.app-sidebar.is-narrow .sidebar-sub {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+.sidebar-sub-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---------- 首屏「我的收藏 / 最近访问」防跳（CLS） ----------
+   数据来自 localStorage，预渲染 HTML 里没有这两个 section；若等 hydration 再插入，
+   整页分类列表会被往下推一下。app.vue 的 head 脚本在首次绘制前把
+   html[data-personal] 设为 none / fav / recent / both，这里据此在首帧就撑好容器高度
+   与下外边距，hydration 只填内容、高度不变 → 零位移、无需入场动效。
+   高度可预测的前提：chip 行固定单行（.personal-row），标题与行高均为定值。
+   单段 = 标题 20.8 + mb-3 12 + chip 行 44 = 77px；双段再 + space-y-5 20px。 */
+.personal-slot {
+  min-height: 0;
+  margin-bottom: 0;
+}
+.personal-slot[hidden] { display: none; }
+html[data-personal="fav"] .personal-slot,
+html[data-personal="recent"] .personal-slot {
+  min-height: 77px;
+  margin-bottom: 40px;
+}
+html[data-personal="both"] .personal-slot {
+  min-height: 174px;
+  margin-bottom: 40px;
+}
+/* 单行横向滚动：让区块高度恒定，预占值才能精确；隐藏滚动条但保留触摸/滚轮横滑 */
+.personal-row {
+  height: 44px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.personal-row::-webkit-scrollbar { display: none; }
 
 html, body {
   background: var(--canvas);
@@ -152,79 +285,131 @@ body {
   backdrop-filter: blur(20px);
 }
 
-/* 卡片 hover：L1 → L2 的三段同步反馈（底色 / 边框 / 1px 外圈柔光）。
-   全部中性、无投影、无位移；box-shadow 与 border-color 同一条 160ms 曲线，
-   不会出现「边框先亮、光后到」的错位。顶面高光始终保留。 */
+/* 卡片 hover：只换底色（surface-1 → surface-2），边框色恒定不变。
+   v1.6 起「状态不动边框」是全站规则——暗色下边框是提亮方向，hover 再加深一圈
+   会让每张卡多出一条亮线，网格显得像表格。
+   v1.7：连 v1.2 留下的 inset 1px 顶面高光一并去掉——它在白卡上不可见，却在 hover
+   灰底上显出一条亮线，且沿 8px 圆角抗锯齿成断续「虚线」，是「状态不加线」的漏网之鱼。
+   现在卡片只有一条 hairline + 一个底色，静止与 hover 结构完全一致；
+   无投影、无位移、无文字抖动。 */
 .site-card {
-  box-shadow: inset 0 1px 0 var(--card-highlight);
-  transition: background-color var(--dur-hover) var(--ease-out),
-              border-color var(--dur-hover) var(--ease-out),
-              box-shadow var(--dur-hover) var(--ease-out);
+  border-radius: var(--radius-card);
+  transition: background-color var(--dur-hover) var(--ease-out);
 }
-.site-card:hover {
-  border-color: var(--card-border-hover);
-  box-shadow: inset 0 1px 0 var(--card-highlight), 0 0 0 1px var(--card-edge);
+.site-card:hover,
+.site-card:focus-within {
+  background-color: var(--surface-2);
+  z-index: 20; /* 浮到同层卡片之上，网址气泡不被下方卡片遮挡 */
 }
-/* favicon 底片跟着一起亮，否则卡片边框亮了、里面还是个小灰洞 */
-.site-icon { transition: border-color var(--dur-hover) var(--ease-out); }
-.site-card:hover .site-icon { border-color: var(--card-border-hover); }
-
+/* 网址气泡：参考 webstack 的独立固定定位气泡，挂在 body 上由 index.vue 的 showTip
+   按卡片位置实时定位（position:fixed + 行内 left/top）。因脱离卡片层叠，永不被父级
+   overflow 裁切、也不被下一分类卡片遮挡；下方空间不足时翻到卡片上方（.tip-above）。
+   中性深灰（非彩色），守无彩色外壳约束；pointer-events:none 不挡点击。 */
+.url-tip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 320px;
+  padding: 6px 9px;
+  background: #17191E;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.3;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+/* 默认：气泡在卡片下方，箭头在气泡顶缘、指向上方卡片 */
+.url-tip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 14px;
+  border: 5px solid transparent;
+  border-bottom-color: #17191E;
+}
+/* 翻到卡片上方时：箭头改在气泡底缘、指向下方卡片 */
+.url-tip.tip-above::before {
+  top: 100%;
+  bottom: auto;
+  border-top-color: #17191E;
+  border-bottom-color: transparent;
+}
+/* 站点网格：响应式递增列数，但封顶 4 列 —— 让每张卡片更宽、更像参考图的横条，
+   同时守住「宽屏铺满不留白」。卡片本身做成宽而矮（h-[84px]）的修长横条。
+   列数随视口递增：<640=1、640–1023=2、1024–1439=3、≥1440=4（封顶）。
+   用 minmax(0,1fr) 防止内容把列撑破。 */
+.site-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .site-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .site-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1440px) {
+  .site-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 /* 栏目主标题：v1.1 全页挤在 12–16px，这是首页唯一的视觉落点；
    单独成类而非新增 tailwind token，about 的次级标题仍用 16px text-section */
 .section-title {
   font-size: 22px;
   line-height: 1.2;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.6px;
   font-weight: 600;
   text-wrap: balance;
 }
 
-/* 搜索聚焦：1px 高对比描边 + 4px 中性柔光，200ms 一起长出。
-   旧版是 focus:border-ink 的纯黑硬边 + 3px 柔光环，两套反馈、两个时长叠加，像表单；
-   现在描边由 ::after 覆盖在 input 边框上，只留一条线，鼠标点击与键盘 Tab 完全一致。 */
+/* 页面级主标题（about 的「关于 LeanNav」等）：比栏目主标题再大一档，
+   建立清晰的一级层级；仍墨色、≤600 字重、无彩色，守无彩色外壳约束。
+   不进 tailwind token —— 配置类改动不被常驻 dev server 热更新，改这里才能即时预览。 */
+.page-title {
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -1px;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+/* v1.7 焦点语言：全站只有「无框的细环 + 柔光」——2px 内环（--focus-ring，≥3:1）
+   + 10px 渐隐外晕（--focus-glow），200ms 一起长出。不再画 1px 高对比线，
+   也不再叠 2px 实心 outline：静止态那条 hairline 是唯一的结构边，状态变化只加光。
+   外晕必须是 blur 而非 spread 硬边环，否则会读作「加粗的框」而不是光。
+   下面四处（搜索框 / .field / 全局 focus-visible / .field-underline）共用同一套值。 */
 .search-halo {
   position: relative;
   border-radius: 8px;
   transition: box-shadow var(--dur-halo) var(--ease-out);
 }
-.search-halo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--focus-line);
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity var(--dur-halo) var(--ease-out);
-  pointer-events: none;
+.search-halo:focus-within {
+  box-shadow: 0 0 0 2px var(--focus-ring), 0 0 10px 2px var(--focus-glow);
 }
-.search-halo:focus-within { box-shadow: 0 0 0 4px var(--focus-halo); }
-.search-halo:focus-within::after { opacity: 1; }
-.search-halo input:hover { border-color: var(--hairline-strong); }
-/* 焦点可见性由上面这一组承担，屏蔽全局 2px outline 以免出现双重框 */
+/* 焦点由父级光圈承担，屏蔽 input 自身的全局反馈，避免出现双重框 */
 .search-halo input:focus-visible { outline: none; box-shadow: none; }
 
-/* 编辑器 / 表单字段聚焦：与搜索框同语言——一条 1px 高对比线（--focus-line）+ 4px 中性柔光（--focus-halo），
-   200ms（--dur-halo）一起长出；边框宽度恒定 1px，聚焦只换色，无位移、无布局抖动。
-   不再用 focus:border-primary 的硬色边，也不再叠加全局 2px 轮廓（否则会出现双重反馈）。
-   .field 用于盒式字段（文本框 / 下拉 / 多行），.field-underline 用于下划线式字段（子栏目名）。 */
+/* .field 用于盒式字段（文本框 / 下拉 / 多行），.field-underline 用于下划线式字段（子栏目名）。 */
 .field {
   border: 1px solid var(--hairline);
-  transition: border-color var(--dur-halo) var(--ease-out),
-              box-shadow var(--dur-halo) var(--ease-out),
+  transition: box-shadow var(--dur-halo) var(--ease-out),
               background-color var(--dur-hover) var(--ease-out);
 }
-.field:hover { border-color: var(--hairline-strong); }
 .field:focus {
   outline: none;
-  border-color: var(--focus-line);
-  box-shadow: 0 0 0 4px var(--focus-halo);
+  box-shadow: 0 0 0 2px var(--focus-ring), 0 0 10px 2px var(--focus-glow);
 }
 .field-underline {
   border-bottom: 1px solid var(--hairline);
-  transition: border-color var(--dur-halo) var(--ease-out);
+  transition: box-shadow var(--dur-halo) var(--ease-out);
 }
-.field-underline:hover { border-bottom-color: var(--hairline-strong); }
-.field-underline:focus { outline: none; border-bottom-color: var(--focus-line); box-shadow: none; }
+/* 下划线式没有四周边框，是唯一例外：聚焦时底边线隐去，换成 2px 不占位的柔光带；
+   外晕同用 blur 渐隐，与盒式字段的「细环 + 柔光」保持同一手感。 */
+.field-underline:focus {
+  outline: none;
+  border-bottom-color: transparent;
+  box-shadow: inset 0 -2px 0 var(--focus-ring), 0 5px 10px -2px var(--focus-glow);
+}
 
 /* 241 个空心星标常驻是 v1.1 最大的视觉噪声：默认隐藏，需要时才出现。
    已收藏、键盘聚焦、触屏（hover:none）三种情况必须常显，否则功能不可发现。 */
@@ -272,7 +457,9 @@ body {
 .slide-up-enter-active, .slide-up-leave-active { transition: opacity var(--dur-expand) var(--ease-out); }
 .slide-up-enter-from, .slide-up-leave-to { opacity: 0; }
 
-/* L4 焦点环：2px 实心墨色反相（保证 3:1 非文本对比度）+ 4px 中性柔光外圈 */
+/* L4 键盘焦点：与输入框同一套「细环 + 柔光」，不画 2px 实心描边。
+   内环 --focus-ring 与画布 ≥3:1，满足非文本对比度；box-shadow 自动跟随元素自身圆角。
+   卡片也走这条通用规则——v1.7 起已无 inset 顶面高光需要特例保留。 */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -280,16 +467,9 @@ select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible,
 [role="button"]:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 8px;
-  box-shadow: 0 0 0 4px var(--focus-halo);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--focus-ring), 0 0 10px 2px var(--focus-glow);
 }
-/* 站点卡片的焦点环不能吃掉 L1 的 inset 顶面高光 */
-.site-card:focus-visible {
-  box-shadow: inset 0 1px 0 var(--card-highlight), 0 0 0 4px var(--focus-halo);
-}
-
 input[type="search"]::-webkit-search-cancel-button { display: none; }
 
 /* 视口外 section 跳过布局与绘制；auto 让浏览器记住真实高度，避免滚动跳动 */
@@ -306,22 +486,9 @@ input[type="search"]::-webkit-search-cancel-button { display: none; }
 
 .not-mounted { transition: none !important; }
 
-/* 侧栏 Lucide 统一 1.75 描边；激活指示条是常驻元素，靠 opacity 切换，不引起重排 */
+/* 侧栏 Lucide 统一 1.75 描边；激活态只靠整行底色 + 文字/图标墨色表达，
+   不再叠加独立的 2px 竖条（与圆角行几何语言冲突、折叠态孤立、二级线索过密）。 */
 .nav-icon { stroke-width: 1.75; }
-.nav-rail {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 2px;
-  height: 16px;
-  border-radius: 999px;
-  background: var(--ink);
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity var(--dur-hover) var(--ease-out);
-  pointer-events: none;
-}
-.nav-rail.is-active { opacity: 1; }
 
 /* ---------- v1.4 按钮：从 NavEditor 的 scoped 样式抽成全局 token 驱动 ----------
    统一圆角（--radius-control）、焦点（与全站 focus-visible 一致）、按压微交互；
@@ -363,7 +530,8 @@ input[type="search"]::-webkit-search-cancel-button { display: none; }
               border-color var(--dur-hover) var(--ease-out),
               transform var(--dur-hover) var(--ease-out);
 }
-.tool-btn:hover { background: var(--surface-2); color: var(--ink); border-color: var(--hairline-strong); }
+/* v1.6：hover 只换底色与文字，不动边框色（全站「状态不加线」规则） */
+.tool-btn:hover { background: var(--surface-2); color: var(--ink); }
 .tool-btn:active { transform: scale(0.99); }
 .tool-btn-primary {
   border-color: var(--primary);

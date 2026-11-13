@@ -10,7 +10,7 @@
     <!-- 左：菜单 + （仅移动端抽屉关闭时）紧凑 logo -->
     <div class="flex items-center gap-0.5 min-w-0">
       <button @click="$emit('toggle-menu')" type="button" aria-label="展开或收起菜单" title="展开或收起菜单"
-        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control text-ink-muted hover:bg-surface-1 hover:text-ink transition-colors duration-[160ms]">
+        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control text-ink-muted hover:bg-surface-1 hover:text-ink transition-colors duration-200">
         <Menu class="nav-icon w-[18px] h-[18px]" />
       </button>
       <AppLogo v-if="showLogo" compact class="ml-0.5" />
@@ -25,7 +25,7 @@
         <input id="nav-search" ref="inputEl" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
           @keydown.esc="clear" type="search" autocomplete="off"
           :placeholder="isCompact ? '搜索站点' : '搜索资源、工具、栏目...'"
-          class="w-full min-h-[44px] bg-surface-1 border border-hairline rounded-control py-2.5 pl-10 pr-10 sm:pr-16 text-body text-ink outline-none transition-colors duration-[160ms] placeholder:text-ink-tertiary" />
+          class="w-full min-h-[44px] bg-surface-1 border border-hairline rounded-control py-2.5 pl-10 pr-10 sm:pr-16 text-body text-ink outline-none transition-colors duration-200 placeholder:text-ink-tertiary" />
         <button v-if="modelValue" type="button" aria-label="清除搜索" title="清除搜索" @click="clear"
           class="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-control text-ink-subtle hover:text-ink hover:bg-surface-2 transition-colors">
           <X class="nav-icon w-4 h-4" />
@@ -42,12 +42,12 @@
 
       <a href="https://github.com/leanku/lean-nav" target="_blank" rel="noopener noreferrer"
         aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码"
-        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors duration-[160ms]">
+        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors duration-200">
         <Github class="nav-icon w-[18px] h-[18px]" aria-hidden="true" />
       </a>
 
       <button @click="$emit('open-editor')" type="button" aria-label="自定义导航" title="自定义分类和网站"
-        class="relative shrink-0 min-h-[44px] px-2 sm:px-2.5 flex items-center justify-center gap-1.5 rounded-control border border-transparent sm:border-hairline text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors duration-[160ms]">
+        class="relative shrink-0 min-h-[44px] px-2 sm:px-2.5 flex items-center justify-center gap-1.5 rounded-control border border-transparent sm:border-hairline text-ink-muted hover:text-ink hover:bg-surface-1 transition-colors duration-200">
         <Settings2 class="nav-icon w-4 h-4" />
         <span class="hidden md:inline text-body">自定义</span>
         <span v-if="source !== 'default'" class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-ink" aria-hidden="true"></span>
@@ -57,7 +57,7 @@
 
       <button @click="toggle" type="button" :aria-label="isDark ? '切换到浅色主题' : '切换到深色主题'"
         :title="isDark ? '切换到浅色主题' : '切换到深色主题'"
-        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control hover:bg-surface-1 transition-colors duration-[160ms] text-ink-muted overflow-hidden">
+        class="w-11 h-11 shrink-0 flex items-center justify-center rounded-control hover:bg-surface-1 transition-colors duration-200 text-ink-muted overflow-hidden">
         <Transition name="slide-up" mode="out-in">
           <Sun v-if="isDark" :key="'sun'" class="nav-icon w-[18px] h-[18px]" />
           <Moon v-else :key="'moon'" class="nav-icon w-[18px] h-[18px]" />

@@ -10,10 +10,10 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'LeanNav | 精选开发者导航',
+      title: 'LeanNav | 极简导航',
       htmlAttrs: { lang: 'zh-CN' },
       meta: [
-        { name: 'description', content: '汇集全球优质编程资源、设计素材和实用工具，为开发者提供最高效的上网导航。' },
+        { name: 'description', content: '汇集全球优质编程、设计与实用工具，提供极简高效的上网导航。' },
         { name: 'theme-color', content: '#F7F8FA', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#0B0C0F', media: '(prefers-color-scheme: dark)' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },

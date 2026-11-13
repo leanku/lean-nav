@@ -4,20 +4,22 @@
     @toggle-group="toggleGroup" @navigate="onNavigate" @open-editor="editorOpen = true"
     @submit="openFirstResult" @clear="onClearSearch">
 
-    <article class="p-5 sm:p-7 lg:p-10 w-full max-w-[1600px] mx-auto flex-1">
+    <article class="px-5 sm:px-7 lg:px-10 pt-5 sm:pt-7 lg:pt-10 pb-14 sm:pb-16 lg:pb-20 flex-1">
 
-      <!-- 收藏与最近访问：静态站用本机存储实现「自己的起始页」 -->
-      <div v-if="!searchQuery.trim() && (favorites.length || recent.length)" data-personal class="mb-10 space-y-5">
+      <!-- 收藏与最近访问：静态站用本机存储实现「自己的起始页」。
+           容器常驻 DOM：高度由 html[data-personal] 在首帧预留（见 app.vue 的 head 脚本 + main.css），
+           hydration 只填内容、不改高度，避免分类列表被往下推。搜索时用 hidden 整块收起。 -->
+      <div data-personal class="personal-slot space-y-5" :hidden="!!searchQuery.trim()">
         <section v-if="favorites.length">
           <h2 class="flex items-center gap-2 mb-3 text-body font-medium text-ink">
             <Star class="nav-icon w-4 h-4 text-ink" fill="currentColor" aria-hidden="true" />
             我的收藏 <span class="tnum text-caption text-ink-subtle">{{ favorites.length }}</span>
           </h2>
-          <div class="flex flex-wrap gap-2">
+          <div class="personal-row flex gap-2">
             <div v-for="site in favorites" :key="site.url"
-              class="inline-flex items-center rounded-control bg-surface-1 border border-hairline hover:border-hairline-strong transition-colors">
+              class="inline-flex items-center shrink-0 rounded-control bg-surface-1 border border-hairline hover:bg-surface-2 transition-colors">
               <a :href="site.url" target="_blank" rel="noopener noreferrer nofollow" @click="recordVisit(site)"
-                class="min-h-[44px] flex items-center pl-3 pr-1 text-body text-ink">
+                class="min-h-[44px] flex items-center pl-3 pr-1 text-body text-ink whitespace-nowrap">
                 {{ site.title }}<span class="ml-1 text-caption text-ink-tertiary">↗</span>
               </a>
               <span role="button" tabindex="0" :aria-label="`取消收藏 ${site.title}`" title="取消收藏"
@@ -32,10 +34,10 @@
           <h2 class="flex items-center gap-2 mb-3 text-body font-medium text-ink">
             <Clock3 class="nav-icon w-4 h-4 text-ink" aria-hidden="true" /> 最近访问
           </h2>
-          <div class="flex flex-wrap gap-2">
+          <div class="personal-row flex gap-2">
             <a v-for="site in recent" :key="site.url" :href="site.url" target="_blank"
               rel="noopener noreferrer nofollow" @click="recordVisit(site)"
-              class="min-h-[44px] inline-flex items-center px-3 rounded-control bg-surface-1 border border-hairline text-body text-ink-muted hover:border-hairline-strong hover:text-ink transition-colors">
+              class="min-h-[44px] inline-flex items-center px-3 shrink-0 whitespace-nowrap rounded-control bg-surface-1 border border-hairline text-body text-ink-muted hover:bg-surface-2 hover:text-ink transition-colors">
               {{ site.title }}
             </a>
           </div>
@@ -60,20 +62,20 @@
               <span class="w-[2px] h-[18px] rounded-full shrink-0" :style="{ backgroundColor: accentOf(group.id) }" aria-hidden="true"></span>
               <h2 class="section-title text-ink whitespace-nowrap">{{ group.name }}</h2>
               <span class="tnum text-caption text-ink-tertiary">{{ displayData[group.id].length }}</span>
-              <span class="h-px flex-1 bg-hairline" aria-hidden="true"></span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+            <div class="grid gap-3 site-grid">
               <a v-for="(site, si) in displayData[group.id]" :key="group.id + '-' + si" :href="site.url"
                 target="_blank" rel="noopener noreferrer nofollow" @click="recordVisit(site)"
-                class="site-card group relative flex items-start gap-3 px-3.5 py-3 rounded-card bg-surface-1 border border-hairline hover:bg-surface-2">
+                @mouseenter="showTip(site, $event)" @mouseleave="hideTip" @focusin="showTip(site, $event)" @focusout="hideTip"
+                class="site-card group relative flex items-center gap-3 px-4 py-3 h-[84px] bg-surface-1 border border-hairline">
 
-                <!-- favicon 放在独立的浅色/深色底片上，透明图标不会糊在卡片底色里 -->
-                <div class="site-icon relative w-10 h-10 shrink-0 rounded-control bg-canvas border border-hairline flex items-center justify-center overflow-hidden">
-                  <span class="absolute inset-0 flex items-center justify-center text-card-title font-medium text-ink-subtle"
+                <!-- favicon 直接置于卡片，去掉底片背景与边框；40px 图标更醒目，透明图标不糊（卡片底色已统一） -->
+                <div class="relative w-11 h-11 shrink-0 flex items-center justify-center overflow-hidden">
+                  <span class="absolute inset-0 flex items-center justify-center text-[20px] font-medium text-ink-subtle"
                     aria-hidden="true">{{ (site.title || '?').charAt(0) }}</span>
                   <img v-if="iconSrc(site.url)" :src="iconSrc(site.url)" alt="" aria-hidden="true" loading="lazy"
-                    decoding="async" class="relative w-5 h-5 object-contain" @error="onIconError" />
+                    decoding="async" class="relative w-10 h-10 object-contain" @error="onIconError" />
                 </div>
 
                 <div class="flex-1 min-w-0 pr-4">
@@ -81,7 +83,7 @@
                     <h3 class="text-card-title text-ink truncate">{{ site.title }}</h3>
                     <ArrowUpRight class="nav-icon w-3 h-3 text-ink-tertiary group-hover:text-ink shrink-0 transition-[color,transform] duration-[160ms] group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" aria-hidden="true" />
                   </div>
-                  <p class="text-caption text-ink-subtle mt-1.5 line-clamp-2 leading-[18px]">{{ site.desc }}</p>
+                  <p v-if="site.desc" class="text-body text-ink-muted mt-1 truncate">{{ site.desc }}</p>
                 </div>
 
                 <span role="button" tabindex="0"
@@ -107,7 +109,7 @@
         <p class="text-body text-ink-subtle mt-2">换个更短的关键词，或试试这些常用词：</p>
         <div class="mt-4 flex flex-wrap items-center gap-2">
           <button v-for="word in suggestions" :key="word" @click="searchQuery = word" type="button"
-            class="min-h-[44px] px-3 rounded-control border border-hairline text-body text-ink-muted hover:border-hairline-strong hover:text-ink transition-colors">
+            class="min-h-[44px] px-3 rounded-control border border-hairline text-body text-ink-muted hover:bg-surface-2 hover:text-ink transition-colors">
             {{ word }}
           </button>
         </div>
@@ -128,13 +130,23 @@
       <ChevronDown class="nav-icon w-5 h-5 rotate-180" aria-hidden="true" />
     </button>
   </Transition>
+
+  <!-- 网址气泡：独立挂在 body 上的固定定位元素，由 showTip 按卡片位置实时定位，
+       永不被父级 overflow 裁切、也不被下一分类卡片遮挡（参考 webstack 的固定气泡）。 -->
+  <Teleport to="body">
+    <div v-if="tip.show" ref="tipEl" class="url-tip" :class="{ 'tip-above': tip.above }"
+      :style="{ left: tip.left + 'px', top: tip.top + 'px' }" role="tooltip">
+      {{ tip.text }}
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { ChevronDown, Star, Clock3, SearchX, ArrowUpRight } from 'lucide-vue-next'
 import { useNavConfig, listCategories } from '@/composables/useNavConfig'
 import { useFavorites } from '@/composables/useFavorites'
+import { useGroupExpansion } from '@/composables/useGroupExpansion'
 import localIcons from '@/data/local-icons.json'
 import NavEditor from '@/components/NavEditor.vue'
 import AppShell from '@/components/AppShell.vue'
@@ -167,6 +179,47 @@ const iconSrc = (url) => {
 }
 const onIconError = (event) => { event.target.style.display = 'none' }
 
+// 网址 tooltip：参考 webstack 的独立固定定位气泡，挂在 body 上由 JS 实时定位，
+// 不依附于卡片内部，故永远不被父级 overflow 裁切、也不被下一分类卡片遮挡；
+// 下方空间不足时自动翻到卡片上方。纯中性深灰样式，守无彩色外壳约束。
+const tip = reactive({ show: false, text: '', above: false, left: 0, top: 0 })
+const tipEl = ref(null)
+
+function positionTip(card) {
+  const r = card.getBoundingClientRect()
+  const el = tipEl.value
+  const tipW = el ? el.offsetWidth : 220
+  const tipH = el ? el.offsetHeight : 32
+  const gap = 8
+  // 水平：贴近卡片左缘，并夹在视口内
+  let left = r.left + 12
+  left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8))
+  // 垂直：默认浮于卡片下方；下方放不下且上方有空间才翻到上方
+  const belowFits = (window.innerHeight - r.bottom) >= tipH + gap
+  let top
+  if (!belowFits && r.top - gap - tipH > 0) {
+    top = r.top - gap - tipH
+    tip.above = true
+  } else {
+    top = r.bottom + gap
+    tip.above = false
+  }
+  tip.left = left
+  tip.top = top
+}
+function showTip(site, e) {
+  tip.text = site.url
+  tip.show = true
+  // 等元素渲染后再量尺寸定位（v-if 挂载后 nextTick 才可读取真实宽高）
+  nextTick(() => positionTip(e.currentTarget))
+}
+function hideTip() {
+  tip.show = false
+}
+// 滚动时位置会失真，直接收起气泡
+onMounted(() => window.addEventListener('scroll', hideTip, true))
+onUnmounted(() => window.removeEventListener('scroll', hideTip, true))
+
 // 墨色 4 级明度只写在 main.css 的 --accent-1..4；颜色不承担导航功能
 const hashOf = (text) => {
   let hash = 0
@@ -176,10 +229,10 @@ const hashOf = (text) => {
 const accentOf = (id) => `var(--accent-${hashOf(id) % 4 + 1})`
 
 useSeoMeta({
-  title: 'LeanNav | 精选开发者导航',
-  ogTitle: 'LeanNav - 极速、简洁的开发者导航利器',
-  description: '汇集全球优质编程资源、设计素材和实用工具，为开发者提供最高效的上网导航。',
-  ogDescription: '汇集全球优质编程资源、设计素材和实用工具。',
+  title: 'LeanNav | 极简导航',
+  ogTitle: 'LeanNav - 极简高效的网址导航',
+  description: '汇集全球优质编程、设计与实用工具，提供极简高效的上网导航。',
+  ogDescription: '汇集全球优质编程、设计与实用工具。',
   ogImage: 'https://nav.leanku.com/og-image.png',
   twitterCard: 'summary_large_image',
   twitterImage: 'https://nav.leanku.com/og-image.png',
@@ -204,36 +257,15 @@ useHead({ script: [{ type: 'application/ld+json', children: structuredData }] })
 const searchQuery = ref('')
 const showBackToTop = ref(false)
 const activeCategory = ref('')
-const collapsedGroups = ref([])
-const manualGroups = ref(new Set())
+const { collapsedGroups, toggleGroup } = useGroupExpansion(navData)
 const editorOpen = ref(false)
 const editorKey = ref(0)
 const suggestions = ['AI', 'GitHub', '设计', '文档', '工具']
 
 const toggleFav = (site) => toggleFavorite(site)
 
-/* 「只展开当前」：随滚动高亮展开所在分组，其余收起；
-   用户手动点开或收起后，该分组状态不再被滚动联动改写；主动点击栏目或刷新后恢复联动。 */
-const groupIds = computed(() => navData.value.filter((group) => group.children?.length).map((group) => group.id))
-function syncGroupExpansion(activeId) {
-  const owner = navData.value.find((group) => group.children?.some((child) => child.id === activeId))?.id
-    || groupIds.value[0] || ''
-  const next = new Set(groupIds.value)
-  if (owner) next.delete(owner)
-  manualGroups.value.forEach((id) => {
-    if (collapsedGroups.value.includes(id)) next.add(id)
-    else next.delete(id)
-  })
-  collapsedGroups.value = [...next]
-}
-watch(activeCategory, syncGroupExpansion, { immediate: true })
-
-const toggleGroup = (id) => {
-  manualGroups.value = new Set([...manualGroups.value, id])
-  collapsedGroups.value = collapsedGroups.value.includes(id)
-    ? collapsedGroups.value.filter((item) => item !== id)
-    : [...collapsedGroups.value, id]
-}
+/* 分组展开状态见 useGroupExpansion：默认全收起 + 记忆用户选择，
+   不再随滚动高亮自动展开（v1.5 改，原「只展开当前」联动已移除）。 */
 
 /* ---------- 搜索 ---------- */
 const leafCategories = computed(() => listCategories(config.value))
@@ -380,9 +412,7 @@ function onHashChange() {
   if (id && document.getElementById(id)?.classList.contains('category-section')) lockNavHighlight(id)
 }
 const onNavigate = (id) => {
-  manualGroups.value = new Set()
   lockNavHighlight(id)
-  syncGroupExpansion(id)
 }
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -408,14 +438,25 @@ const onResetConfig = () => {
   nextTick(() => { setupObserver(); onScroll() })
 }
 
+/* 首屏防跳：head 脚本已在首帧设好 data-personal，这里让 flag 与真实 state 对齐，
+   覆盖 SPA 导航回首页（模块级 state 已有值、flag 还是首次加载时算的）等情况。
+   不在 setup 阶段立即执行，否则会覆盖 head 脚本写入的首帧预留值。 */
+function syncPersonalFlag() {
+  if (!import.meta.client) return
+  const hasF = favorites.value.length > 0
+  const hasR = recent.value.length > 0
+  document.documentElement.dataset.personal = hasF && hasR ? 'both' : hasF ? 'fav' : hasR ? 'recent' : 'none'
+}
+watch([favorites, recent], syncPersonalFlag)
+
 /* ---------- 生命周期 ---------- */
 onMounted(async () => {
   initFavorites()
+  syncPersonalFlag()
 
   await init()
   iconSrcCache.clear()
   if (!activeCategory.value) activeCategory.value = Object.keys(displayData.value)[0] || ''
-  syncGroupExpansion(activeCategory.value)
 
   const q = route.query.q
   if (typeof q === 'string' && q) searchQuery.value = q

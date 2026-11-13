@@ -11,8 +11,8 @@
 
     <div :class="[
       isCollapsed ? 'lg:ml-[72px]' : 'lg:ml-[240px]',
-      'min-h-screen flex flex-col',
-      isMounted ? 'transition-[margin] duration-[240ms] cubic-bezier' : 'not-mounted'
+      'app-shell-main min-h-screen flex flex-col',
+      isMounted ? '' : 'not-mounted'
     ]">
       <!-- 品牌只在侧栏；仅当侧栏完全离屏（移动端抽屉关闭）时顶栏才补一个紧凑 logo，避免重复 -->
       <AppHeader ref="headerRef" :model-value="modelValue" :source="source"
