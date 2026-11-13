@@ -89,12 +89,26 @@ function writeManifest() {
       files[domain] = filename
     }
   }
+  const count = Object.keys(files).length
+  // 防呆：图标目录为空（干净 clone 没带资源 / 本地误删）时，不要用空映射覆写仓库里
+  // 已有的清单——那会让构建产物静默丢掉全部 favicon 引用，页面只剩首字母色块。
+  if (!count && existsSync(manifestPath)) {
+    try {
+      const previous = JSON.parse(readFileSync(manifestPath, 'utf8'))
+      const previousCount = Object.keys(previous?.files || {}).length
+      if (previousCount) {
+        console.warn(`[icons] 图标目录为空，保留清单中原有的 ${previousCount} 条映射；` +
+          `若 public/icons/ 未随构建提供，线上会请求到 404 并回退首字母兜底`)
+        return previousCount
+      }
+    } catch { /* 清单损坏则照常重写 */ }
+  }
   writeFileSync(manifestPath, JSON.stringify({
     updatedAt: new Date().toISOString().slice(0, 10),
     domains: Object.keys(files).sort(),
     files,
   }, null, 2) + '\n')
-  return Object.keys(files).length
+  return count
 }
 
 normalizeExisting()
@@ -102,8 +116,9 @@ const existing = domains.filter(hasIcon)
 const pending = domains.filter((domain) => !hasIcon(domain))
 
 if (quick && pending.length > QUICK_LIMIT) {
+  const kept = writeManifest()
   console.log(`[icons] 有 ${pending.length} 个新图标待抓取，构建默认跳过；请手动运行 npm run icons`)
-  console.log(`[icons] 本地图标 ${writeManifest()} 个`)
+  console.log(`[icons] 清单保留 ${kept} 条映射；请确认 public/icons/ 随构建产物一起提供`)
   process.exit(0)
 }
 if (!pending.length) {

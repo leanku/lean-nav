@@ -16,7 +16,8 @@ npm run generate   # 生成静态站点到 .output/public，直接上传即可
 ```
 
 `npm run build` / `npm run generate` 会自动执行 `prebuild` / `pregenerate`：
-先校验数据一致性（不一致直接阻断构建），再补抓少量新增图标；图标抓取失败不会阻断构建。
+先校验数据一致性（不一致直接阻断构建），再补抓少量新增图标（缺失超过 24 个时跳过，需手动跑 `npm run icons`）；图标抓取失败不会阻断构建。
+`public/icons/` 已随仓库提交，干净环境构建（CI / Cloudflare Pages）无需联网即可带齐 favicon。
 
 ## 用户怎么自定义
 
