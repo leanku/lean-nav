@@ -1,28 +1,18 @@
-/* LeanNav 全站样式 —— 唯一视觉基准见项目根目录 DESIGN.md（v1.2）
+/* LeanNav 全站样式 —— 视觉规范见项目根目录 DESIGN.md
    所有颜色只在此处定义（:root 亮色 / .dark 暗色），组件内禁止硬编码色值。
-
-   v1.1：界面外壳完全无彩色，颜色只来自 241 个站点自身的 favicon。
-         primary 是「墨色反相」：亮色 = 近黑底白字，暗色 = 近白底黑字。
-   v1.2：补回被 v1.1 一并禁掉的「材质」——中性黑白 ≤8% alpha 的玻璃、微光、
-         inset 顶面高光。色相限制一字未放宽，新增变量没有一个带色相。
-   v1.3：品牌标记改圆角方形；搜索聚焦与卡片 hover 的边框改为「单线 + 同步柔光」，
-         去掉硬黑边与叠加反馈，新增变量仍是中性黑白 rgba。
-   v1.6：线条收敛——hairline 两主题统一减弱一档；hover 一律不动边框色；
-         焦点反馈由「1px 高对比线 + 淡环」改为「无线的双层光圈」（去掉 focus-line）。
-   v1.7：删掉卡片 inset 1px 顶面高光（hover 灰底上会显出断续亮线，是「状态不加线」
-         的漏网之鱼）；焦点环 3px→2px、外层由 4px 硬边实心环换成 10px 高斯柔光，
-         颜色 alpha 不动（被 ≥3:1 非文本对比度锁住），只减面积与硬度。 */
+   外壳无彩色，唯一的彩色来自站点 favicon；材质层只用中性黑白。
+   状态变化不加线：hover 只换底色，焦点只加「细环 + 柔光」。 */
 
 :root {
   color-scheme: light;
 
-  /* 亮色方向修正：白卡片浮在略灰的画布上（v1.1 反过来，卡片是凹进去的） */
+  /* 亮色：白卡片浮在略灰的画布上 */
   --canvas: #F7F8FA;
   --surface-1: #FFFFFF;
   --surface-2: #EFF0F2;
   --surface-3: #E6E8EB;
   --surface-4: #DEE0E4;
-  --hairline: #EBEDF0;              /* v1.6 减弱一档：静止态线条在网格里更安静 */
+  --hairline: #EBEDF0;              /* 静止态线条在网格里保持安静 */
   --hairline-strong: #C7CAD1;       /* 仅用于显式强调分隔，不再用于 hover 反馈 */
   --ink: #17191E;
   --ink-muted: #4B515A;
@@ -42,22 +32,19 @@
   --accent-3: #878E98;
   --accent-4: #B6BBC3;
 
-  /* v1.2 材质层：全部中性黑白，无第二色相 */
+  /* 材质层：全部中性黑白，无第二色相 */
   --chrome-bg: rgba(247, 248, 250, 0.78);      /* 顶栏半透明玻璃底 */
   --chrome-line: rgba(23, 25, 30, 0.08);        /* 顶栏发丝线 */
-  /* v1.7：卡片顶面 1px inset 高光已移除——白卡上本就不可见，hover 底色变灰后反而
-     显出一条亮线，沿 8px 圆角被抗锯齿切成断续的「虚线」。材质由顶栏玻璃、首屏微光、
-     框架微投影承担，卡片不再有第二条边。 */
-  /* 焦点：不画 1px 高对比线，改用「2px 内环 + 10px 高斯柔光」的无框光圈。
+  /* 焦点：不画 1px 高对比线，只用「2px 内环 + 10px 高斯柔光」的无框光圈。
      内环 alpha 被 ≥3:1 非文本对比度锁住（亮 3.30:1 / 暗 3.11:1），不能再降；
-     v1.7 只减面积与硬度：环 3→2px，外层由 4px 硬边实心环换成渐隐柔光。 */
+     外晕必须用 blur，用 spread 画硬边环会读作加粗的框。 */
   --focus-ring: rgba(23, 25, 30, 0.50);
   --focus-glow: rgba(23, 25, 30, 0.10);
   --selection-bg: rgba(23, 25, 30, 0.12);       /* 文字选中 */
   --selection-ink: #17191E;
   --ambient: rgba(255, 255, 255, 0.55);         /* 首屏顶部天空光，极淡 */
 
-  /* v1.2 动效：一条缓动曲线 + 按距离分级的时长 */
+  /* 动效：一条缓动曲线 + 按距离分级的时长 */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-hover: 200ms;
   --dur-expand: 240ms;
@@ -69,7 +56,7 @@
   --popover-shadow: 0 12px 32px rgba(18, 21, 26, 0.12), 0 1px 2px rgba(18, 21, 26, 0.06);
   --scrollbar-thumb: #C7CAD1;
 
-  /* v1.4：字体 / 圆角 / 语义背景 token（单一来源，组件与 tailwind 共用） */
+  /* 字体 / 圆角 / 语义背景 token（单一来源，组件与 tailwind 共用） */
   --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --radius-control: 8px;
   --radius-card: 8px;
@@ -86,7 +73,7 @@
   --surface-2: #1B1E23;
   --surface-3: #23272D;
   --surface-4: #2A2F36;
-  --hairline: #22262C;              /* v1.6 减弱一档：暗色「提亮线」感知更强，降得比亮色更多 */
+  --hairline: #22262C;              /* 暗色「提亮线」感知更强，降得比亮色更多 */
   --hairline-strong: #3D434C;       /* 仅用于显式强调分隔，不再用于 hover 反馈 */
   --ink: #F3F5F6;
   --ink-muted: #C3C9D1;
@@ -132,7 +119,7 @@
   transition: margin-left var(--dur-sidebar) var(--ease-out);
 }
 
-/* ---------- 侧栏折叠动画（v1.5）----------
+/* ---------- 侧栏折叠动画 ----------
    旧实现用 v-if 把文字/箭头瞬间移除，宽度虽在过渡，观感仍是「跳变」。
    改为常驻 DOM + CSS 淡出/收拢：透明度、最大宽度、左外边距三者一起过渡，
    与侧栏宽度、主内容边距共用 --dur-sidebar，切换时不再有先后错位。 */
@@ -269,8 +256,8 @@ body {
 .brand-mark { display: block; }
 .dark .brand-mark { filter: invert(1); }
 
-/* ---------- v1.2 材质 ----------
-   只给「外壳」和「卡片顶面」加光，不给 241 张卡片加投影或模糊。
+/* ---------- 材质 ----------
+   只给「外壳」和「卡片顶面」加光，不给 250 张卡片加投影或模糊。
    background-image 叠在 tailwind 的 bg-canvas（background-color）之上，不冲突。 */
 .app-shell {
   background-image: radial-gradient(70% 100% at 50% 0%, var(--ambient), transparent 100%);
@@ -286,12 +273,9 @@ body {
 }
 
 /* 卡片 hover：只换底色（surface-1 → surface-2），边框色恒定不变。
-   v1.6 起「状态不动边框」是全站规则——暗色下边框是提亮方向，hover 再加深一圈
-   会让每张卡多出一条亮线，网格显得像表格。
-   v1.7：连 v1.2 留下的 inset 1px 顶面高光一并去掉——它在白卡上不可见，却在 hover
-   灰底上显出一条亮线，且沿 8px 圆角抗锯齿成断续「虚线」，是「状态不加线」的漏网之鱼。
-   现在卡片只有一条 hairline + 一个底色，静止与 hover 结构完全一致；
-   无投影、无位移、无文字抖动。 */
+   全站「状态不动边框」——暗色下边框是提亮方向，hover 再加深会让网格像表格。
+   卡片只有一条 hairline + 一个底色，静止与 hover 结构完全一致；
+   无 inset 高光、无投影、无位移、无文字抖动。 */
 .site-card {
   border-radius: var(--radius-card);
   transition: background-color var(--dur-hover) var(--ease-out);
@@ -352,8 +336,7 @@ body {
 @media (min-width: 1440px) {
   .site-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-/* 栏目主标题：v1.1 全页挤在 12–16px，这是首页唯一的视觉落点；
-   单独成类而非新增 tailwind token，about 的次级标题仍用 16px text-section */
+/* 栏目主标题：首页唯一的视觉落点；单独成类，about 的次级标题仍用 16px text-section */
 .section-title {
   font-size: 22px;
   line-height: 1.2;
@@ -364,7 +347,7 @@ body {
 
 /* 页面级主标题（about 的「关于 LeanNav」等）：比栏目主标题再大一档，
    建立清晰的一级层级；仍墨色、≤600 字重、无彩色，守无彩色外壳约束。
-   不进 tailwind token —— 配置类改动不被常驻 dev server 热更新，改这里才能即时预览。 */
+   不进 tailwind token：样式规则集中在 main.css，便于双主题同步。 */
 .page-title {
   font-size: 28px;
   line-height: 1.25;
@@ -373,10 +356,10 @@ body {
   text-wrap: balance;
 }
 
-/* v1.7 焦点语言：全站只有「无框的细环 + 柔光」——2px 内环（--focus-ring，≥3:1）
-   + 10px 渐隐外晕（--focus-glow），200ms 一起长出。不再画 1px 高对比线，
-   也不再叠 2px 实心 outline：静止态那条 hairline 是唯一的结构边，状态变化只加光。
-   外晕必须是 blur 而非 spread 硬边环，否则会读作「加粗的框」而不是光。
+/* 焦点语言：全站只有「无框的细环 + 柔光」——2px 内环（--focus-ring，≥3:1）
+   + 10px 渐隐外晕（--focus-glow），200ms 一起长出。不画 1px 高对比线，
+   也不叠 2px 实心 outline：静止态那条 hairline 是唯一的结构边，状态变化只加光。
+   外晕必须是 blur 而非 spread 硬边环，否则会读作「加粗的框」。
    下面四处（搜索框 / .field / 全局 focus-visible / .field-underline）共用同一套值。 */
 .search-halo {
   position: relative;
@@ -411,7 +394,7 @@ body {
   box-shadow: inset 0 -2px 0 var(--focus-ring), 0 5px 10px -2px var(--focus-glow);
 }
 
-/* 241 个空心星标常驻是 v1.1 最大的视觉噪声：默认隐藏，需要时才出现。
+/* 星标默认隐藏，避免长列表出现大量空心图标；
    已收藏、键盘聚焦、触屏（hover:none）三种情况必须常显，否则功能不可发现。 */
 .fav-toggle {
   opacity: 0;
@@ -428,7 +411,7 @@ body {
   .fav-toggle { opacity: 1; }
 }
 
-/* 主题切换只过渡外壳，不让 241 张卡片一起重绘；JS 的移除定时器与 --dur-theme 同步 */
+/* 主题切换只过渡外壳，不让 250 张卡片一起重绘；JS 的移除定时器与 --dur-theme 同步 */
 .theme-transition,
 .theme-transition body,
 .theme-transition .app-shell,
@@ -459,7 +442,7 @@ body {
 
 /* L4 键盘焦点：与输入框同一套「细环 + 柔光」，不画 2px 实心描边。
    内环 --focus-ring 与画布 ≥3:1，满足非文本对比度；box-shadow 自动跟随元素自身圆角。
-   卡片也走这条通用规则——v1.7 起已无 inset 顶面高光需要特例保留。 */
+   卡片也走这条通用规则。 */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -490,7 +473,7 @@ input[type="search"]::-webkit-search-cancel-button { display: none; }
    不再叠加独立的 2px 竖条（与圆角行几何语言冲突、折叠态孤立、二级线索过密）。 */
 .nav-icon { stroke-width: 1.75; }
 
-/* ---------- v1.4 按钮：从 NavEditor 的 scoped 样式抽成全局 token 驱动 ----------
+/* ---------- 按钮：从 NavEditor 抽成全局 token 驱动 ----------
    统一圆角（--radius-control）、焦点（与全站 focus-visible 一致）、按压微交互；
    全部中性。危险操作用语义色 --danger（非品牌色相），hover 给极淡底色而非彩色描边。 */
 .icon-btn {
@@ -530,7 +513,7 @@ input[type="search"]::-webkit-search-cancel-button { display: none; }
               border-color var(--dur-hover) var(--ease-out),
               transform var(--dur-hover) var(--ease-out);
 }
-/* v1.6：hover 只换底色与文字，不动边框色（全站「状态不加线」规则） */
+/* hover 只换底色与文字，不动边框色（全站「状态不加线」规则） */
 .tool-btn:hover { background: var(--surface-2); color: var(--ink); }
 .tool-btn:active { transform: scale(0.99); }
 .tool-btn-primary {

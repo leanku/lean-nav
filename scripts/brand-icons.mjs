@@ -5,14 +5,15 @@
  * 透明导航箭头。因此只要保留 alpha 通道、替换 RGB，就能得到在浅色/深色标签页都清晰
  * 的图标，不需要引入图像处理依赖。
  *
- * 除 favicon / PWA / apple-touch / 暗色标签页外，还会把分享图 og-image.png 左上角的
- * 旧标记换成同一造型（只替换标记，文字排版保持原样）。
+ * 除 favicon / PWA / apple-touch / 暗色标签页外，还会重新渲染分享图 og-image.png
+ * （其设计源 scripts/og-image.html 直接引用本图，换 logo 后自动保持同源）。
  *
  * 用法：npm run brand（修改 navigator.png 后重跑一次）
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { inflateSync, deflateSync } from 'node:zlib'
 import { dirname, join, resolve } from 'node:path'
+import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -183,53 +184,6 @@ function appleTouch(mask) {
   return { width: size, height: size, pixels: out }
 }
 
-/* 分享图是 1200×630 的 RGB 图，左上角有一枚白色反相标记。
-   只替换这枚标记，标题与文案排版原样保留（重排文字要引入字体栅格化，不值得）。 */
-function patchOgImage(mask) {
-  const file = join(publicDir, 'og-image.png')
-  if (!existsSync(file)) return
-  const { width: w, height: h, pixels } = decodePng(readFileSync(file), 3)
-  const at = (x, y) => (y * w + x) * 3
-  // 旧标记限定在左上角，避开右侧 LeanNav 字样（x ≥ 166）与下方标题（y ≥ 240）
-  let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1
-  for (let y = 20; y < 220; y += 1) {
-    for (let x = 20; x < 160; x += 1) {
-      const i = at(x, y)
-      if (pixels[i] > 190 && pixels[i + 1] > 190 && pixels[i + 2] > 190) {
-        if (x < x0) x0 = x
-        if (x > x1) x1 = x
-        if (y < y0) y0 = y
-        if (y > y1) y1 = y
-      }
-    }
-  }
-  if (x1 < 0 || Math.abs((x1 - x0) - (y1 - y0)) > 3) {
-    console.log('  og-image.png          跳过（未识别到旧标记区域，请手动同步）')
-    return
-  }
-  const size = x1 - x0 + 1
-  const bgIndex = at(20, 20)
-  const bg = [pixels[bgIndex], pixels[bgIndex + 1], pixels[bgIndex + 2]]
-  const pad = 2
-  for (let y = y0 - pad; y <= y1 + pad; y += 1) {
-    for (let x = x0 - pad; x <= x1 + pad; x += 1) {
-      const i = at(x, y)
-      pixels[i] = bg[0]; pixels[i + 1] = bg[1]; pixels[i + 2] = bg[2]
-    }
-  }
-  const mark = downscale(mask, size)
-  const white = [246, 247, 248]
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      const a = mark.pixels[(y * size + x) * 4 + 3] / 255
-      const i = at(x0 + x, y0 + y)
-      for (let c = 0; c < 3; c += 1) pixels[i + c] = Math.round(bg[c] * (1 - a) + white[c] * a)
-    }
-  }
-  writeFileSync(file, encodePng(w, h, pixels, 3))
-  console.log(`  og-image.png          ${w}×${h} 左上角标记 ${size}×${size} 同步为圆角方形`)
-}
-
 const mask = decodePng(readFileSync(source))
 console.log(`读取 ${source.replace(root + '/', '')}：${mask.width}×${mask.height} RGBA 遮罩`)
 console.log('生成品牌图标：')
@@ -257,5 +211,9 @@ icoHeader.writeUInt32LE(faviconPng.length, 14)
 icoHeader.writeUInt32LE(22, 18)    // offset
 writeFileSync(join(publicDir, 'favicon.ico'), Buffer.concat([icoHeader, faviconPng]))
 console.log('  favicon.ico               32×32 (内嵌 PNG)')
-patchOgImage(mask)
+// 分享图 og-image.png 的设计源（scripts/og-image.html）直接引用 navigator.png，
+// 换 logo 后一起重绘；无 Chrome 环境时跳过，不阻断品牌图标生成。
+const og = spawnSync(process.execPath, [join(root, 'scripts/og-image.mjs')], { encoding: 'utf8' })
+if (og.status === 0) process.stdout.write(og.stdout)
+else console.log('  og-image.png          未同步（渲染需要本机 Chrome，可稍后运行 npm run og）')
 console.log('完成。')

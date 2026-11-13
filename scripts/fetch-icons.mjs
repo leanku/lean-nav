@@ -61,7 +61,7 @@ function normalizeExisting() {
       const key = basename(filename, extname(filename))
       const buffer = readFileSync(path)
       const ext = detectExt(buffer)
-      // 同步盘 / macOS AppleDouble 元数据、只读目录或受限沙箱都可能让清理失败，
+      // 同步盘 / macOS AppleDouble 元数据或只读目录都可能让清理失败，
       // 这类残留不参与清单生成，忽略即可，绝不能阻断构建。
       if (!ext) { try { unlinkSync(path) } catch { /* 忽略 */ } continue }
       if (extname(filename).slice(1) === ext) continue

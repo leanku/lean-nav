@@ -21,10 +21,11 @@ npm run dev          # http://localhost:3000
 | `npm run dev` | 本地开发服务器 |
 | `npm run check` | 校验 `nav.js` 与 `sites.json` 的分类 id 一致性（不一致直接报错） |
 | `npm run icons` | 抓取站点 favicon 到 `public/icons`（需联网，约 1 分钟） |
-| `npm run brand` | 从 `public/navigator.png` 重新生成全站品牌图标与分享图 |
-| `npm run generate` | 生成静态站点到 `.output/public`（`prebuild`/`pregenerate` 会自动先跑 `check` + 补抓图标） |
+| `npm run brand` | 从 `public/navigator.png` 重新生成全站品牌图标，并联动重渲染分享图 |
+| `npm run og` | 单独重新渲染分享图 `public/og-image.png`（设计源 `scripts/og-image.html`，需本机 Chrome） |
+| `npm run generate` | 生成静态站点到 `.output/public`（`pregenerate` 会先跑 `check` + 补抓图标） |
 
-> 提交前请务必运行 `npm run check`，数据 id 不一致会在构建时被阻断。
+> 提交前请运行 `npm run check`；数据 id 不一致会在构建时被阻断。
 
 ## 目录结构
 
@@ -37,7 +38,7 @@ app/assets/css/   main.css（双主题 token、焦点态、动效偏好、conten
 app/data/         nav.js（分类结构）· sites.json（网站）· local-icons.json（已本地化图标域名）
 app/pages/        index.vue（首页）· about.vue（关于）· customize.vue（自定义）
 app/utils/        icons.js（Lucide 图标名 → 组件映射）
-scripts/          check-config.mjs · fetch-icons.mjs · brand-icons.mjs
+scripts/          check-config.mjs · fetch-icons.mjs · brand-icons.mjs · og-image.mjs + og-image.html
 public/           navigator.png（唯一品牌图）· icons/ · manifest.webmanifest · sw.js · og-image.png
 ```
 
@@ -47,7 +48,7 @@ public/           navigator.png（唯一品牌图）· icons/ · manifest.webman
 - **双主题必须走 CSS 变量**：样式一律引用 `app/assets/css/main.css` 里的 token，禁止在组件里写死色值（如 `bg-[#222327]`）。
 - **无彩色外壳**：`--primary` 是墨色反相，页面里唯一的彩色来自站点 favicon，新增 UI 不要引入第二色相。
 - **不改技术栈**：保持 Nuxt 4 + Vue 3 + Tailwind + `nuxt generate`，性能问题只做局部治理。
-- 视觉细节请对照 [`DESIGN.md`](./DESIGN.md) 的「设计不变量」维护约束，避免无意回退已有成果。
+- 视觉细节请对照 [`DESIGN.md`](./DESIGN.md) 的「设计不变量」，确保改动与全站视觉语言一致。
 
 ## 配置与数据格式
 
@@ -56,9 +57,18 @@ public/           navigator.png（唯一品牌图）· icons/ · manifest.webman
 - 两边 `id` 必须一致；不一致时未登记分类会被自动补成一个分组，不会丢内容，但 `npm run check` 会报错阻断构建。
 - 访客自定义的新域名会尝试外部图标服务，失败回退首字母色块，不会出现破图。
 
+## 部署配置
+
+`nuxt.config.ts` 在构建期读取两个环境变量，修改后需重新 `npm run generate`：
+
+| 变量 | 默认值 | 说明 |
+|---|---|---|
+| `NUXT_PUBLIC_SITE_URL` | `https://nav.leanku.com` | Open Graph 图片与结构化数据的绝对地址前缀；部署到自己的域名时请覆盖 |
+| `NUXT_PUBLIC_ANALYTICS_ID` | 空 | 可选 GA4 统计 ID；留空时不注入任何第三方统计脚本 |
+
 ## 品牌资源
 
-- `public/navigator.png` 是全站唯一品牌标记（黑色圆角方形 + 镂空箭头）。**不要手改** `icon-192/512`、`favicon.*`、`apple-touch-icon`、`navigator-dark`、`og-image` 等派生图——改完 `navigator.png` 后跑 `npm run brand` 重新生成。
+- `public/navigator.png` 是全站唯一品牌标记（黑色圆角方形 + 镂空箭头）。**不要手改** `icon-192/512`、`favicon.*`、`apple-touch-icon`、`navigator-dark` 等派生图——改完 `navigator.png` 后跑 `npm run brand` 重新生成（分享图会联动渲染）。
 - `public/icon.svg` 是需手工同步的矢量副本。
 
 ## Issue 与 PR

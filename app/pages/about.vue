@@ -61,16 +61,16 @@
                 <dd class="tnum mt-1 text-title text-ink">{{ item.value }}</dd>
               </div>
             </dl>
-            <p class="mt-4 text-body text-ink-subtle">全部由人工录入，图标保存在本站，不向第三方请求。</p>
+            <p class="mt-4 text-body text-ink-subtle">内置站点的图标随项目一起发布，默认无需外部请求。</p>
           </div>
 
           <div class="rounded-card border border-hairline bg-surface-1 p-6">
-            <h2 class="text-section text-ink mb-4">联系</h2>
-            <p class="text-body text-ink-subtle mb-3">发现好站、内容失效或有合作需求，欢迎写信。</p>
+            <h2 class="text-section text-ink mb-4">反馈与贡献</h2>
+            <p class="text-body text-ink-subtle mb-3">发现好站、内容失效或有改进建议，欢迎提交 Issue 或 PR。</p>
             <div class="space-y-2.5">
-              <a href="mailto:ceo@leanku.com"
+              <a href="https://github.com/leanku/lean-nav/issues" target="_blank" rel="noopener noreferrer"
                 class="link inline-flex items-center min-h-[40px] gap-2 text-body text-ink-muted hover:text-ink">
-                <Mail class="nav-icon w-4 h-4" aria-hidden="true" /> support@leanku.com
+                <MessageCircle class="nav-icon w-4 h-4" aria-hidden="true" /> GitHub Issues
               </a>
               <a href="https://github.com/leanku/lean-nav" target="_blank" rel="noopener noreferrer"
                 class="link inline-flex items-center min-h-[40px] gap-2 text-body text-ink-muted hover:text-ink">
@@ -97,7 +97,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Mail, Github } from 'lucide-vue-next'
+import { MessageCircle, Github } from 'lucide-vue-next'
 import { useNavConfig, listCategories, countSites } from '@/composables/useNavConfig'
 import { useGroupExpansion } from '@/composables/useGroupExpansion'
 import AppShell from '@/components/AppShell.vue'

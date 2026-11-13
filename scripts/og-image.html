@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- 分享图（1200×630）设计源，由 `npm run og` 用无头 Chrome 渲染为 public/og-image.png。
+     文案与站点定位保持一致：极简导航、无「开发者」窄化、无个人域名。
+     左上角标记直接引用 public/navigator.png 并反色（与站点暗色 .brand-mark 同法），
+     因此分享图的品牌标记与 favicon 永远同源，换 logo 后重跑 `npm run og` 即可。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>LeanNav · 分享图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background: #0B0C0F;
+    color: #F3F5F6;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* 与站点首屏一致的中性微光，无色相 */
+  .glow { position: absolute; inset: 0;
+    background: radial-gradient(720px 520px at 0% 0%, rgba(255, 255, 255, 0.04), transparent 70%); }
+  .brand { position: absolute; top: 62px; left: 84px; display: flex; align-items: center; gap: 20px; }
+  .brand img { width: 60px; height: 60px; filter: invert(1); display: block; }
+  .brand span { font-size: 24px; font-weight: 500; letter-spacing: 0.2px; }
+  .rule { position: absolute; left: 84px; right: 84px; height: 1px; background: #22262C; }
+  .rule.top { top: 198px; }
+  .rule.bottom { top: 498px; }
+  h1 { position: absolute; left: 84px; top: 232px;
+    font-size: 72px; line-height: 1.2; font-weight: 600; letter-spacing: -1.5px; }
+  .sub { position: absolute; left: 84px; top: 428px;
+    font-size: 22px; color: #8A909B; letter-spacing: 0.5px; }
+  .foot { position: absolute; left: 84px; right: 84px; top: 516px; display: flex;
+    justify-content: space-between;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 16px; color: #6C727C; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="brand"><img src="../public/navigator.png" alt=""><span>LeanNav</span></div>
+  <div class="rule top"></div>
+  <h1>一个极简的网址导航<br>从一个入口开始</h1>
+  <p class="sub">精选站点 · 纯静态部署 · 完全可自定义</p>
+  <div class="rule bottom"></div>
+  <div class="foot"><span>在 3 秒内找到并打开一个站点</span><span>数据只保存在你的浏览器</span></div>
+</body>
+</html>

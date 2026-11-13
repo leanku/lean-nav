@@ -12,5 +12,5 @@ package-lock.json
 public/icons
 public/og-image.png
 
-# Local project data
+# Local tooling data
 .workbuddy

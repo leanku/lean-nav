@@ -1153,6 +1153,16 @@
             "title": "Phind",
             "url": "https://phind.com",
             "desc": "开发者AI搜索引擎"
+        },
+        {
+            "title": "v0",
+            "url": "https://v0.app/",
+            "desc": "Vercel 的 React / Tailwind 界面生成"
+        },
+        {
+            "title": "Cline",
+            "url": "https://cline.bot/",
+            "desc": "开源 VS Code 编码 Agent 扩展"
         }
     ],
     "ai-image": [
@@ -1252,6 +1262,43 @@
             "title": "Prompt123.cn",
             "url": "https://www.prompt123.cn/",
             "desc": "免费的中文AI提示词"
+        }
+    ],
+    "ai-agent": [
+        {
+            "title": "getdesign.md",
+            "url": "https://getdesign.md/",
+            "desc": "给编码 Agent 的色彩、字体与组件设计参考"
+        },
+        {
+            "title": "DeepSeek Harness",
+            "url": "https://www.deepseek.com/harness/",
+            "desc": "DeepSeek 官方开源 Agent Harness"
+        },
+        {
+            "title": "Hermes Agent",
+            "url": "https://hermes-agent.nousresearch.com/",
+            "desc": "Nous Research 的常驻 Agent，持久记忆与自动生成技能"
+        },
+        {
+            "title": "Anthropic Skills",
+            "url": "https://github.com/anthropics/skills",
+            "desc": "官方 SKILL.md 参考实现仓库"
+        },
+        {
+            "title": "MCP",
+            "url": "https://modelcontextprotocol.io/",
+            "desc": "Model Context Protocol 官方规范与文档"
+        },
+        {
+            "title": "Smithery",
+            "url": "https://smithery.ai/",
+            "desc": "MCP Server 目录，带质量评分"
+        },
+        {
+            "title": "MCP Servers",
+            "url": "https://mcpservers.org/",
+            "desc": "MCP Server 与 Agent Skills 目录"
         }
     ]
 }

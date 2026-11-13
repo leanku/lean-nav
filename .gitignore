@@ -13,34 +13,26 @@ node_modules
 logs
 *.log
 
-# Misc
+# OS / editor cruft
 .DS_Store
 .fleet
 .idea
+Thumbs.db
+.vercel
 
 # Local env files
 .env
 .env.*
 !.env.example
 
-# Local project data (automations, memory, brand backups) — not for the repo
+# Local tooling data (not part of the project)
 .workbuddy/
 
-# public/icons/ is intentionally committed. It is the site's favicon asset set,
-# not a disposable build output: clean-checkout builds (CI / Cloudflare Pages)
-# cannot fetch icons at build time, so omitting it makes every card fall back
-# to a letter block. Regenerate with `npm run icons` after adding sites.
+# public/icons/ is a deployment asset, not generated build output: clean-checkout
+# builds cannot fetch icons. Refresh with `npm run icons` after adding sites.
 
 # TypeScript / build caches
 *.tsbuildinfo
-
-# OS / editor cruft
-Thumbs.db
-.vercel
-
-# Local env overrides
-.env.local
-.env.*.local
 
 # Coverage / test reports
 coverage/

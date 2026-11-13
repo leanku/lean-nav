@@ -165,7 +165,7 @@ const getDomain = (url) => {
   try { return new URL(url).hostname.toLowerCase() } catch { return '' }
 }
 const iconFiles = localIcons.files || {}
-// 241 张卡片会反复调用 iconSrc；按 url 缓存，避免每次渲染都做 URL 解析
+// 250 张卡片会反复调用 iconSrc；按 url 缓存，避免每次渲染都做 URL 解析
 const iconSrcCache = new Map()
 /** 内置站点全部走本地图标（零外部请求）；只有自定义/分享/站点配置里的新域名才尝试在线 favicon，失败仍有首字母色块兜底 */
 const iconSrc = (url) => {
@@ -228,14 +228,17 @@ const hashOf = (text) => {
 }
 const accentOf = (id) => `var(--accent-${hashOf(id) % 4 + 1})`
 
+const { public: { siteUrl } } = useRuntimeConfig()
+const ogImage = `${siteUrl}/og-image.png`
+
 useSeoMeta({
   title: 'LeanNav | 极简导航',
   ogTitle: 'LeanNav - 极简高效的网址导航',
   description: '汇集全球优质编程、设计与实用工具，提供极简高效的上网导航。',
   ogDescription: '汇集全球优质编程、设计与实用工具。',
-  ogImage: 'https://nav.leanku.com/og-image.png',
+  ogImage,
   twitterCard: 'summary_large_image',
-  twitterImage: 'https://nav.leanku.com/og-image.png',
+  twitterImage: ogImage,
 })
 
 /* 结构化数据只列出真实存在的栏目锚点 */
@@ -248,7 +251,7 @@ const structuredData = JSON.stringify({
       '@type': 'ListItem',
       position: index + 1,
       name: category.name,
-      url: `https://nav.leanku.com/#${category.id}`,
+      url: `${siteUrl}/#${category.id}`,
     })),
 })
 useHead({ script: [{ type: 'application/ld+json', children: structuredData }] })

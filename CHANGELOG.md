@@ -1,9 +1,9 @@
 # Changelog
 
-本文件记录面向用户的版本变化（非开发过程日志）。
-
 ## v1.4.0
 
+- 新增「AI热门 › AI Agent」栏目：收录 DeepSeek Harness、Hermes Agent、Anthropic Skills、MCP 官方文档、Smithery、MCP Servers、getdesign.md 等 Agent 生态站点；「AI编程」补充 v0 与 Cline。
+- 分享图重绘：文案与站点定位统一为「极简的网址导航」，去掉站数与个人域名；新增 `scripts/og-image.html` 设计源与 `npm run og` 渲染脚本，`npm run brand` 会联动重渲染。
 - 字体与排版：收敛字体栈为单一 token（`--font-sans`，组件与 Tailwind 共用），新增灰度抗锯齿、字体合成禁用、`text-wrap: balance` 用于栏目标题；正文渲染更干净锐利。
 - 按钮系统化：把 `NavEditor` 内游离的 `.icon-btn` / `.tool-btn` 抽成全局 token 驱动样式（统一 `--radius-control` 圆角、与全站一致的焦点环），新增 `.tool-btn-primary` / `.tool-btn-danger`（危险操作给极淡语义底色而非彩色描边）。
 - 微交互：按钮新增按压缩放（`active: scale`，尊重 `prefers-reduced-motion`），触觉反馈更明确。

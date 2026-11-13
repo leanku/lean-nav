@@ -7,6 +7,7 @@ import {
   FileText, Image, Link2, Zap, Blocks, BookOpen, GraduationCap,
   Globe, Compass, Box, Layout, Chrome, Milestone, Dock, Wand2, Code,
   LayoutGrid, Layers, Folder, Hash, Bookmark, Rocket, Cpu, Monitor, Brush,
+  Workflow,
 } from 'lucide-vue-next'
 
 const iconMap = {
@@ -16,11 +17,12 @@ const iconMap = {
   FileText, Image, Link2, Zap, Blocks, BookOpen, GraduationCap,
   Globe, Compass, Box, Layout, Chrome, Milestone, Dock, Wand2, Code,
   LayoutGrid, Layers, Folder, Hash, Bookmark, Rocket, Cpu, Monitor, Brush,
+  Workflow,
 }
 
 export const iconOf = (name) => iconMap[name] || Globe
 
-/** 编辑器图标网格的可选项。前 32 个是当前默认配置正在使用的图标。 */
+/** 编辑器图标网格的可选项。前 33 个是当前默认配置正在使用的图标。 */
 export const ICON_OPTIONS = [
   { name: 'Star', label: '常用推荐' },
   { name: 'Newspaper', label: '资讯' },
@@ -54,6 +56,7 @@ export const ICON_OPTIONS = [
   { name: 'Blocks', label: '其他工具' },
   { name: 'BookOpen', label: '教程文档' },
   { name: 'GraduationCap', label: '课程' },
+  { name: 'Workflow', label: 'Agent / 编排' },
   { name: 'Globe', label: '网站 / 通用' },
   { name: 'Compass', label: '探索发现' },
   { name: 'Folder', label: '文件夹' },

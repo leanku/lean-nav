@@ -30,6 +30,7 @@
     "check": "node scripts/check-config.mjs",
     "icons": "node scripts/fetch-icons.mjs",
     "brand": "node scripts/brand-icons.mjs",
+    "og": "node scripts/og-image.mjs",
     "prebuild": "npm run check && node scripts/fetch-icons.mjs --quick",
     "pregenerate": "npm run check && node scripts/fetch-icons.mjs --quick"
   },

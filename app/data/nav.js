@@ -26,7 +26,8 @@ export const navConfig = [
             { id: 'ai-chat', name: 'AI对话', icon: 'MessagesSquare' },
             { id: 'ai-code', name: 'AI编程', icon: 'Bot' },
             { id: 'ai-image', name: 'AI绘图', icon: 'Palette' },
-            { id: 'ai-tools', name: 'AI效率工具', icon: 'WandSparkles' }
+            { id: 'ai-tools', name: 'AI效率工具', icon: 'WandSparkles' },
+            { id: 'ai-agent', name: 'AI Agent', icon: 'Workflow' }
         ]
     },
 
